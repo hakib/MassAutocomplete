@@ -1,7 +1,7 @@
-'use strict';
-
 angular.module('MassAutoComplete', [])
 .directive('massAutocomplete', ["$timeout", "$window", "$document", "$q", function ($timeout, $window, $document, $q) {
+  'use strict';
+
   return {
     restrict: "A",
     scope: { options: '&massAutocomplete' },
@@ -311,6 +311,8 @@ angular.module('MassAutoComplete', [])
 }])
 
 .directive('massAutocompleteItem', function () {
+  'use strict';
+
   return {
     restrict: "A",
     require: ["^massAutocomplete", "ngModel"],
