@@ -1,0 +1,56 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
+
+body { 
+  font-family : Ubuntu, "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background-color : #e8e8e8;
+  background : radial-gradient(circle,#f4f4f4,#e4e4e4);
+  background-attachment: fixed;
+}
+
+.main { 
+  background-color : white;
+  max-width : 800px;
+  padding-bottom : 30px;
+}
+
+@media screen and (min-width: 800px) {
+  .main { 
+    margin-top : 30px;
+    margin-bottom : 30px;
+  }
+}
+
+.container .jumbotron { 
+  background-color : orangered;
+  background : linear-gradient(orangered,rgb(233, 0, 56));
+  color : white;
+  border-radius: 0;
+  margin-bottom : 0;
+  text-shadow : 1px 1px 1px #333;
+}
+
+nav.navbar { 
+  border-radius : 0;
+}
+
+h3 { 
+  color : orangered;
+}
+
+.form-control { 
+  background-color : lightyellow;
+  border-radius : 0!important;
+}
+
+.highlight { 
+  background-color : lightyellow;
+  font-weight : bold;
+}
+
+pre { 
+  padding : 0;
+}
+
+th { 
+  background-color : #f4f4f4;
+}

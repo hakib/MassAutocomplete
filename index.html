@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <script src="http://code.jquery.com/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+  
+  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <!-- 
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">
+  -->
+  <link rel="stylesheet" href="https://rawgithub.com/isagalaev/highlight.js/master/src/styles/hybrid.css">
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  
+  <!-- APP 
+  <script src="massautocomplete.js"></script>
+  -->
+  <script src="massautocomplete.min.js"></script>
+  <script src="index.js"></script>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="massautocomplete.theme.css">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+  <title>Mass-Autocomplete - Auto Complete for Angularjs application with a lot to complete</title>
+</head>
+<body ng-app='app'>
+  
+  <div ng-controller="mainCtrl" class="container main">
+    
+    <div class="jumbotron row">
+      <h2>Mass Auto Complete</h2>
+      <div class="text-capitalize"> auto complete for angularjs application with a lot to complete </div>
+    </div>
+    
+    <nav class="navbar navbar-default navbar-inverse row" role="navigation">
+      <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-left">
+          <li> <a href="#usage"> Usage </a> </li> 
+          <li> <a href="#motivation"> Motivation </a> </li> 
+          <li> <a href="#examples"> Examples </a> </li> 
+          <li> <a href="#options"> Options </a> </li> 
+          
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li> <a href="#"> Source </a> </li> 
+          <li> 
+            <a href="https://angularjs.org/" rel="nofllow"> 
+              <img src="https://rawgithub.com/angular/angular.js/master/images/logo/AngularJS-Shield.exports/AngularJS-Shield-small.png" 
+                   alt="Angularjs homepage" height="25px"> </a> </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div mass-autocomplete=ac_container_options>
+    
+    <h3> Details </h3>
+    
+    <table class="table table-bordered"> 
+      <tr> <th> Dependencies </th> <td> JQuery, Angular, Angular-Sanitize </td> </tr> 
+      <tr> <th> Size </th> <td> xkb, yKB gzipped and minified </td></tr>
+      <tr> <th> Competability </th> <td> IE9+,Firefox ,Chrome, Safari </td></tr>
+    </table>
+    
+    <h4> Directive </h4> 
+    <p>
+      <code>mass-autocomplete</code> - Auto complete container. Maintains the suggestion box.
+    </p>
+    <p>
+      <code>mass-autocomplete-item</code> - Attached to an input. Requires ng-model and mass-autocomplete.
+    </p>
+  
+    <h3 id="usage"> Usage </h3>
+    <div class="row">
+      <div class="col-sm-4">
+        <input type='text' 
+               ng-model='dirty.state_simple'
+               placeholder='Select a state'
+               class="form-control"
+               mass-autocomplete-item='ac_options' />
+      </div>
+      <div class="col-sm-8">
+        <ul class="list-unstyled">
+          <li ng-repeat='cb in callbacks track by $index'>
+            {{ $index }}: <code>{{ cb }}</code>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <h4> HTML </h4>
+    <pre><code lang="html">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="//code.jquery.com/jquery.min.js">&lt;/script>
+    &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"&gt;&lt;/script&gt;
+    &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"&gt;&lt;/script&gt;
+    
+    &lt;script src="massAutocomplete.js"&gt;&lt;/script&gt;
+    &lt;!-- Optional --&gt;
+    &lt;link href="massAutocomplete.css" rel="stylesheet" type="text/css" /&gt;
+  &lt;/head&gt;
+  
+  &lt;body ng-app=app&gt;
+    &lt;div ng-controller=mainCtrl&gt;
+      &lt;div mass-autocomplete&gt;
+        &lt;input ng-model='dirty.value' 
+               mass-autocomplete-item='autocomplete_options' /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+
+    <h4> Javascript </h4>         
+    <pre><code lang="js">
+var app = angular.module('app',['MassAutoComplete','ngSanitize']);
+app.controller('mainCtrl', function ($scope, $sce, $q) { 
+  $scope.dirty = {};
+  
+  var states = ['Alabama', 'Alaska', 'California' /* ... */ ];
+  
+  function suggest_state (term) { 
+    var q = term.toLowerCase().trim();
+    var results = [];
+    
+    // Search first 10 states that contain `term`
+    for (var i=0; i < states.length && results.length < 10; i++) {
+      var state = states[i];
+       if (state.toLowerCase().indexOf(q) > -1)
+         results.push({ 
+           label : state, 
+           value : state
+         });
+    }
+
+    return results; 
+  }
+  
+  $scope.autocomplete_options = { 
+    suggest : suggest_state
+  }
+});
+    </code></pre>
+
+    <hr> 
+  
+    <h3 id="motivation"> Motivation </h3>
+    <p> 
+      MassAutocomplete was created as part of a new project that required auto completing a lot of input fields.
+    </p>
+    <p>
+      Most existing auto complete implementations (<a href="http://bower.io/search/?q=auto%20complete%20angular">1</a>, 
+      <a href="http://ngmodules.org/tags/autocomplete">2</a>) are wraping the input field
+      and appending a suggestion box along with several watches. This is fine if you want to auto complete one or two 
+      inputs, But, When there are several dosen inputs the memory, The DOM and the watch count will start to bloat and might impact performace.
+      For example, <a href="http://angular-ui.github.io/bootstrap/#/typeahead">angular-ui typehead</a> will create 4 watches per input field. 
+      10 input fields will result in 40 watches. 
+      100 fields (a 10x10 grid) will result in 400 watches. 
+    </p>
+    
+    <h4> Different approach </h4> 
+    <p>
+      MassAutocomplete was implemented with a different approach in mind.
+      Instead of attaching the suggestion box to each input field, We use transclusion to maintain 
+      only one box for the entire document. This approach guranty that additional input fields will not 
+      require additional DOM or watches for the purpose of the auto complete.
+    </p>
+    <p> 
+      MassAutocomplete does not provide filtering, linking, ranking or sorting. 
+      The function for generating suggestions should be implemented in the app.
+    </p>
+    
+    <hr> 
+  
+    <h3 id="examples"> Examples </h3> 
+      
+      <p> 
+        The following examples demonstrate common use casses for auto complete.
+        The code in these exmaples is not part of the module. 
+      </p>
+      <p>
+        All the examples in this section are under a single <code>mass-autocomplete</code> container.
+      </p>
+      
+      <h4> Highlighting </h4> 
+      <div class="row">
+        <div class="col-sm-4">
+          <input type='text' 
+                 placeholder='Select a state (2 letters)'
+                 class="form-control"
+                 ng-model='dirty.country_highlight'
+                 mass-autocomplete-item='ac_option_highlight' />          
+        </div>
+        <div class="col-sm-8">
+          <pre><code lang="js"> 
+function highlight (str, term) { 
+  var highlight_regex = new RegExp('(' + term + ')','gi');
+  return str.replace(highlight_regex, 
+    '&lt;span class="highlight"&gt;$1&lt;/span&gt;');
+};
+
+function suggest_state_with_highlight (term) {
+  if (term.length < 2) 
+    return;
+
+  var suggestions = suggest_state(term);
+  suggestions.forEach(function(s) {
+    // In real life you should reuse the regexp object
+    s.label = $sce.trustAsHtml(highlight(s.label, term));
+  });
+
+  return suggestions;
+};
+
+$scope.ac_option_highlight = { 
+  suggest : suggest_state_with_highlight
+}
+          </code></pre>
+        </div>
+      </div>
+        
+      <hr>
+        
+      <h4> Delimited </h4> 
+      <div class="row">
+        <div class="col-sm-4">
+          <input type='text' 
+                 placeholder='Select states (Seperate by comma)'
+                 class="form-control"
+                 ng-model='dirty.country_delimited'
+                 mass-autocomplete-item='ac_option_delimited' />          
+        </div>
+        <div class="col-sm-8">
+          <pre><code lang="js"> 
+function suggest_state_delimited (term) { 
+  var ix = term.lastIndexOf(','),
+      lhs = term.substring(0, ix + 1),
+      rhs = term.substring(ix + 1),
+      suggestions = suggest_state(rhs);
+
+  suggestions.forEach(function(s) {
+    s.value = lhs + s.value;
+  });
+
+  return suggestions;
+};
+
+$scope.ac_option_delimited = { 
+  suggest : suggest_state_delimited
+}
+          </code></pre>
+        </div>
+      </div>
+        
+      <hr> 
+      
+      <h4> Custom formatting </h4>
+      <div class="row">
+        <div class="col-sm-4">
+          <input type='text' 
+                 ng-model='dirty.country_tag'
+                 placeholder='States as tags'
+                 class="form-control"
+                 mass-autocomplete-item='ac_option_tag' />          
+        </div>
+        <div class="col-sm-8">
+          <pre><code lang="js"> 
+function suggest_state_as_tag (term) { 
+  var suggestions = suggest_state_delimited(term);
+  suggestions.forEach(function(s) { 
+    s.label = $sce.trustAsHtml(
+      '&lt;span class="badge"&gt;' + s.label + '&lt;/span&gt;');
+  });
+  return suggestions;
+};
+
+$scope.ac_option_tag = { 
+  suggest : suggest_state_as_tag
+}
+          </code></pre>
+        </div>
+      </div>
+      
+      
+     <hr>
+      
+     
+     <h4> Using the selected object </h4>
+     <div class="row">
+        <div class="col-sm-4">
+          <input type='text' 
+                 class="form-control"
+                 placeholder="Select State"
+                 ng-model='dirty.selected_tag' 
+                 mass-autocomplete-item='ac_option_tag_select' />
+          
+          <br>
+          
+          <span class="text-muted" ng-if='tags.length === 0'>
+            No tags selected. 
+            <br><br>
+            Select a tag from the auto complete menu using the keyboard or the mouse.
+          </span>
+          
+          <ul class="list-unstyled">
+            <li ng-repeat="tag in tags track by $index">
+              <div class="badge">{{tag}}</div>
+            </li>
+          </ul>
+       </div>
+       <div class="col-sm-8">
+         <pre><code lang="js"> 
+$scope.tags = [];
+         
+function add_tag(selected) { 
+  $scope.tags.push(selected.value);
+  // Clear model
+  $scope.dirty.selected_tag = undefined;
+};
+
+$scope.ac_option_tag_select = { 
+  suggest : suggest_state_as_tag, 
+  on_select : add_tag
+}
+          </code></pre>
+       </div>
+     </div>
+     
+     <hr>
+        
+     <h4> Remote source </h4>
+     <div class="row">
+        <div class="col-sm-4">
+          <input type='text' 
+                 class="form-control"
+                 placeholder="Select State"
+                 ng-model='dirty.remote_selection' 
+                 mass-autocomplete-item='ac_option_remote' />
+          
+        </div>
+        <div class="col-sm-8">
+          <pre><code lang="js">
+function suggest_state_remote (term) { 
+  var deferred = $q.defer();
+  // Fake remote source using timeout
+  setTimeout(function () { 
+    deferred.resolve(suggest_state(term));
+  }, 500);
+  return deferred.promise;
+}
+
+$scope.ac_option_remote = { 
+  suggest : suggest_state_remote, 
+  on_error : console.log
+};
+          </code></pre>
+        </div>
+      </div>
+     
+     <hr>
+        
+     <h4> Passing objects </h4>
+     <div class="row">
+        <div class="col-sm-4">
+          <input type='text' 
+                 class="form-control"
+                 placeholder="Name or Mail"
+                 ng-model='dirty.continent' 
+                 mass-autocomplete-item='ac_options_users' />
+          
+          <h5> Selected Object </h5>
+          <pre>
+{{ selected_user | json }}
+          </pre> 
+        </div>
+        <div class="col-sm-8">
+          <pre><code lang="js">
+var users = [
+  {name:'Haki', joined: '2 month ago', email:'Haki@email.com'},
+  {name:'Ran', joined: '1 year ago', email:'Ran123@ac.org'},
+  {name:'John', joined: 'a week ago', email:'JJ@gmail.com'},
+  {name:'Marry', joined: '1 month ago', email:'MarryLove@yahoo.com'},
+  {name:'Charlie', joined: 'Just now', email:'Charlie1987@msn.com'},
+  {name:'Rebeca', joined: '2 days ago', email:'Rebeca@mail.com'},
+  {name:'James', joined: '3 month ago', email:'-'}
+];
+
+function suggest_users(term) { 
+   var q = term.toLowerCase().trim(),
+       results = [];
+
+   for (var i=0; i < users.length; i++) {
+     var user = users[i];
+     if (user.name.toLowerCase().indexOf(q) > -1 || 
+         user.email.toLowerCase().indexOf(q) > -1)
+       results.push({
+         value : user.name,
+         // Pass The object as well
+         // Can be any property name
+         obj : user,
+         label : $sce.trustAsHtml(
+           ' &lt;div class="row"&gt;' + 
+           '  &lt;div class="col-xs-5"&gt; '+
+           '    &lt;i class="fa fa-user"&gt; &lt;/i&gt;&nbsp; ' +
+           '    &lt;strong&gt;' + highlight(user.name,term) + '&lt;/strong&gt;'+
+           '  &lt;/div&gt;' + 
+           '  &lt;div class="col-xs-7 text-right text-muted"&gt; ' +
+           '    &lt;small&gt;' + highlight(user.email,term) + '&lt;/small&gt;' +
+           '  &lt;/div&gt;' +
+           '  &lt;div class="col-xs-12"&gt; ' +
+           '    &lt;span class="text-muted"&gt;Joined &lt;/span&gt;' +
+                user.joined + 
+           '  &lt;/div&gt;' + 
+           ' &lt;/div&gt;'
+         )
+       });
+   }
+   return results; 
+};
+
+$scope.ac_options_users = { 
+  suggest : suggest_users, 
+  on_select : function (selected) { 
+    $scope.selected_user = selected.obj; 
+  }
+};
+          </code></pre>
+        </div>
+      </div>
+          
+     <hr>
+       
+     <h4> Reusing options  </h4>
+     <div class="row">
+        <div class="col-sm-4">         
+          <input type="number" 
+                 ng-model='n'
+                 placeholder="How many inputs ?"
+                 class="form-control" />
+          
+          <div class="text-muted"><br>Enter states:</div>
+          <div ng-repeat='i in n_array(n) track by $index'>
+            <input type='text' 
+                 class="form-control input-sm"
+                 placeholder="Select State"
+                 ng-model='dirty.country[$index]' 
+                 mass-autocomplete-item='ac_option_highlight' />
+            <br>
+          </div>
+        </div>
+        
+        <div class="col-sm-8">
+          <pre><code lang="html"> 
+&lt;div ng-repeat='i in n_array(n) track by $index'/&gt;
+  &lt;input type='text' 
+       placeholder="Select State"
+       ng-model='dirty.state[$index]' 
+       calc-autocomplete-item='ac_option_highlight' /&gt;
+&lt;/div&gt;
+          </code></pre>
+        </div>
+     </div>
+    
+    
+     <h3 id="options"> Options </h3>
+    <table class="table table-bordered"> 
+      
+      <tr> <th colspan=2 class="text-center"> mass-autocomplete=options </th></tr>
+      <tr> <th> debounce_position (150) </th> <td> Debounce in ms for repositioning suggestion box on window resize. </td></tr>
+      <tr> <th> debounce_attach (300) </th> <td> Debounce in ms for attaching input after focus. <br> Prevents unecessary positioning when quickly jumping between inputs using <kbd>tab</kbd>. </td></tr>
+      <tr> <th> debounce_suggest (200) </th> <td> Debounce in ms for calling suggest.<br>Usefull for remote sources and to suspend suggestions while user is typing. </td></tr>
+      <tr> <th> debounce_blur (150) </th> <td> Debounce in ms for detach on blur.<br> Determine the amount of time in milliseconds before losing focus as a result of selecting from he menu until detach is invoked. </td></tr>
+      
+      <tr> <th colspan=2 class="text-center"> mass-autocomplete-item=options_name </th></tr>
+      <tr> <th> suggest(term) </th> 
+           <td> 
+             <p> 
+               Receive a string and return suggestions array.
+             </p>
+             <p> 
+               Each object must contain 
+               <ul class="list-unstyled">
+                 <li> <code>value</code> - Text to display in the textbox. </li>
+                 <li> <code>label</code> - String or trusted html to display in the suggestion box. </li>
+               </ul>
+            </p>
+            <p> 
+              The label is bound using <code>ng-bing-html</code> - 
+              To bind a raw html use <code>$sce.trustAsHtml</code>
+            </p>
+            <p>
+              The return value is an array of objects or a promise that resolves to an array of objects.
+            </p>
+            <p>
+              The object is passed to the <code>on_select</code> callback so additional properties can be used.
+            </p>
+           </td>
+      </tr>
+      <tr> <th> on_attach </th> <td> Callback fired when user focus a field. </td> </tr> 
+      <tr> <th> on_select (selected_item) </th> <td> Callback fired when user select an item from the suggestion box. </td> </tr>
+      <tr> <th> on_detach (current_value) </th> <td> Callback fired when the input field is blured. Usefull for purging cache. </td> </tr>
+      <tr> <th> on_error </th> <td> Callback fired in case <code>suggest</code> failes. </td> </tr>
+    </table>
+    
+    <h4> CSS </h4>
+    
+    <p> The suggestion box template </p>
+    <pre><code lang="html">
+&lt;div class="ac-container" ng-show="show_autocomplete && results.length" style="position:absolute;"&gt;
+  &lt;ul class="ac-menu"&gt;
+    &lt;li ng-repeat="result in results" 
+      ng-if="$index &gt; 0"
+      class="ac-menu-item" 
+      ng-class="$index == selected_index ? \'ac-state-focus\' : \'\'"&gt;
+      &lt;a href ng-click="apply_selection($index,$event)" ng-bind-html=result.label&gt; &lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+     </code></pre>   
+     <p> 
+       We recommand adding <code>backface-visibility:hidden;</code> 
+       and <code>transform:translate3d(0,0,0);</code> 
+       to <code>.ac-container</code> to limit the paint 
+       area to that of the suggestion box only.
+     </p>
+      
+    <h4> Keyboard </h4>
+    <table class="table table-bordered table-condensed"> 
+      <tr><th><kbd>up</kbd>&nbsp;<kbd>down</kbd></th><td>Navigate suggestions</td></tr>
+      <tr><th><kbd>tab</kbd></th><td>Suggestion box is open - Next suggestion</td></tr>
+      <tr><th><kbd>esc</kbd></th><td>Suggestion box is open - Close,  Suggestion box is closed - Revert to initial value.</td></tr>
+    </table>
+    
+  </div>
+  
+  </div>
+</body>
+</html>
