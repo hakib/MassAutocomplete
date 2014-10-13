@@ -130,7 +130,7 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
     var results = [];
 
     // Find first 10 states that contain `term`
-    for (var i=0; i < states.length && results.length < 10; i++) {
+    for (var i=0; i &lt; states.length && results.length &lt; 10; i++) {
       var state = states[i];
        if (state.toLowerCase().indexOf(q) > -1)
          results.push({
@@ -206,7 +206,7 @@ function highlight (str, term) {
 };
 
 function suggest_state_with_highlight (term) {
-  if (term.length < 2)
+  if (term.length &lt; 2)
     return;
 
   var suggestions = suggest_state(term);
@@ -395,7 +395,7 @@ function suggest_users(term) {
    var q = term.toLowerCase().trim(),
        results = [];
 
-   for (var i=0; i < users.length; i++) {
+   for (var i=0; i &lt; users.length; i++) {
      var user = users[i];
      if (user.name.toLowerCase().indexOf(q) > -1 ||
          user.email.toLowerCase().indexOf(q) > -1)
@@ -405,19 +405,19 @@ function suggest_users(term) {
          // Can be any property name
          obj : user,
          label : $sce.trustAsHtml(
-           ' &lt;div class="row"&gt;' +
-           '  &lt;div class="col-xs-5"&gt; '+
-           '    &lt;i class="fa fa-user"&gt; &lt;/i&gt;&nbsp; ' +
-           '    &lt;strong&gt;' + highlight(user.name,term) + '&lt;/strong&gt;'+
-           '  &lt;/div&gt;' +
-           '  &lt;div class="col-xs-7 text-right text-muted"&gt; ' +
-           '    &lt;small&gt;' + highlight(user.email,term) + '&lt;/small&gt;' +
-           '  &lt;/div&gt;' +
-           '  &lt;div class="col-xs-12"&gt; ' +
-           '    &lt;span class="text-muted"&gt;Joined &lt;/span&gt;' +
-                user.joined +
-           '  &lt;/div&gt;' +
-           ' &lt;/div&gt;'
+           '&lt;div class="row"&gt;' +
+           ' &lt;div class="col-xs-5"&gt; '+
+           '   &lt;i class="fa fa-user"&gt; &lt;/i&gt;&nbsp; ' +
+           '   &lt;strong&gt;' + highlight(user.name,term) + '&lt;/strong&gt;'+
+           ' &lt;/div&gt;' +
+           ' &lt;div class="col-xs-7 text-right text-muted"&gt; ' +
+           '   &lt;small&gt;' + highlight(user.email,term) + '&lt;/small&gt;' +
+           ' &lt;/div&gt;' +
+           ' &lt;div class="col-xs-12"&gt; ' +
+           '   &lt;span class="text-muted"&gt;Joined &lt;/span&gt;' +
+               user.joined +
+           ' &lt;/div&gt;' +
+           '&lt;/div&gt;'
          )
        });
    }
