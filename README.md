@@ -1,7 +1,7 @@
 MassAutocomplete
 ================
 
-Auto Complete for Angularjs applications with a lot to complete
+Autocomplete for Angular.js applications with a lot to complete.
 
 [http://hakib.github.io/MassAutocomplete](http://hakib.github.io/MassAutocomplete)
 
@@ -9,7 +9,7 @@ Auto Complete for Angularjs applications with a lot to complete
 **Dependencies: **  JQuery, Angular, Angular-Sanitize
 **Size: ** 12kb, 5.8kb minified
 
-## Basic Usage 
+## Basic Usage
 
 ##### HTML
 ```html
@@ -21,46 +21,45 @@ Auto Complete for Angularjs applications with a lot to complete
 
     <script src="massautocomplete.js"></script>
     <!-- Optional -->
-    <link href="massautocomplete.theme.css" rel="stylesheet" type="text/css" />
+    <link href="massautocomplete.theme.css" rel="stylesheet" type="text/css">
   </head>
 
   <body ng-app=app>
     <div ng-controller=mainCtrl>
       <div mass-autocomplete>
         <input ng-model='dirty.value'
-               mass-autocomplete-item='autocomplete_options' />
+               mass-autocomplete-item='autocomplete_options'>
         </div>
       </div>
   </body>
 </html>
 ```
-##### Javascript 
+
+##### Javascript
 ```javascript
-var app = angular.module('app',['MassAutoComplete','ngSanitize']);
+var app = angular.module('app', ['ngSanitize', 'MassAutoComplete']);
+
 app.controller('mainCtrl', function ($scope, $sce, $q) {
   $scope.dirty = {};
 
-  var states = ['Alabama', 'Alaska', 'California' /* ... */ ];
+  var states = ['Alabama', 'Alaska', 'California', /* ... */ ];
 
-  function suggest_state (term) {
+  function suggest_state(term) {
     var q = term.toLowerCase().trim();
     var results = [];
 
-    // Find first 10 states that contain `term`
+    // Find first 10 states that contain `term`.
     for (var i=0; i < states.length && results.length < 10; i++) {
       var state = states[i];
-       if (state.toLowerCase().indexOf(q) > -1)
-         results.push({
-           label : state,
-           value : state
-         });
+      if (state.toLowerCase().indexOf(q) != -1)
+        results.push({ label: state, value: state });
     }
 
     return results;
   }
 
   $scope.autocomplete_options = {
-    suggest : suggest_state
-  }
+    suggest: suggest_state
+  };
 });
 ```
