@@ -91,9 +91,9 @@
     &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"&gt;&lt;/script&gt;
     &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"&gt;&lt;/script&gt;
 
-    &lt;script src="massAutocomplete.js"&gt;&lt;/script&gt;
+    &lt;script src="massautocomplete.js"&gt;&lt;/script&gt;
     &lt;!-- Optional --&gt;
-    &lt;link href="massAutocomplete.css" rel="stylesheet" type="text/css" /&gt;
+    &lt;link href="massautocomplete.theme.css" rel="stylesheet" type="text/css" /&gt;
   &lt;/head&gt;
 
   &lt;body ng-app=app&gt;
@@ -119,7 +119,7 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
     var q = term.toLowerCase().trim();
     var results = [];
 
-    // Search first 10 states that contain `term`
+    // Find first 10 states that contain `term`
     for (var i=0; i < states.length && results.length < 10; i++) {
       var state = states[i];
        if (state.toLowerCase().indexOf(q) > -1)
