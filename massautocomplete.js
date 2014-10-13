@@ -37,24 +37,24 @@ angular
         RESIZE: 'resize.ac' + $scope.$id,
         BLUR: 'blur.ac' + $scope.$id
       };
-      
+
       var _user_options = $scope.options() || {};
-      var user_options = { 
-        debounce_position: _user_options.debounce_position || 150, 
-        debounce_attach: _user_options.debounce_attach || 300, 
-        debounce_suggest: _user_options.debounce_suggest || 200, 
+      var user_options = {
+        debounce_position: _user_options.debounce_position || 150,
+        debounce_attach: _user_options.debounce_attach || 300,
+        debounce_suggest: _user_options.debounce_suggest || 200,
         debounce_blur: _user_options.debounce_blur || 150
       };
-      
+
       var current_element,
           current_model,
           current_options,
-          previous_value, 
-          value_watch, 
+          previous_value,
+          value_watch,
           last_selected_value;
-      
+
       $scope.show_autocomplete  = false;
-      
+
       // Debounce - Taken from underscore
       function debounce(func, wait, immediate) {
           var timeout;
@@ -70,7 +70,7 @@ angular
               if (callNow) func.apply(context, args);
           };
       }
-      
+
       function _position_autocomplete() {
         var pos = current_element.offset(),     // Top & left including scroll
             h = current_element.outerHeight(),  // Height including inner padding & border
@@ -103,7 +103,7 @@ angular
         $scope.results = [];
         $scope.selected_index = -1;
         bind_element();
-        
+
         value_watch = $scope.$watch(
           function () {
             return ngmodel.$modelValue;
@@ -113,10 +113,10 @@ angular
             // When selecting from the menu the ng-model is updated and this watch
             // is triggered. This cause another suggestion cycle that will provide as
             // suggestion the value that is currently selected - this is unnecessary.
-            if (nv === last_selected_value) 
+            if (nv === last_selected_value)
               return;
 
-            if ($scope.results) 
+            if ($scope.results)
               $scope.results.length = 0;
 
             _position_autocomplete();
@@ -130,7 +130,7 @@ angular
         $scope.selected_index = 0;
         $scope.show_autocomplete = false;
         $scope.waiting_for_suggestion = true;
-        
+
         if (typeof(term) === 'string' && term.length > 0) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded (suggestions) {
@@ -142,7 +142,7 @@ angular
               } else {
                 $scope.results = [];
               }
-            }, 
+            },
             function suggest_failed (error) {
               current_options.on_error && current_options.on_error(error);
             }
@@ -173,7 +173,7 @@ angular
         $scope.selected_index = $scope.results = undefined;
         current_model = current_element = previous_value = undefined;
       };
-      
+
       // Update angular's model view value
       // It is important that before triggering hooks the model's view
       // value will be synced with the visible value to the user. This will
@@ -186,7 +186,7 @@ angular
         }
         return val;
       }
-      
+
       // Set the current selection while navigating through the menu
       function set_selection (i) {
         // We use jquery val instead of setting the model's view value
@@ -202,14 +202,14 @@ angular
       $scope.apply_selection = function (i) {
         // Set focus back on to the input
         current_element.focus();
-        
-        if (!$scope.show_autocomplete || i > $scope.results.length || i < 0) 
+
+        if (!$scope.show_autocomplete || i > $scope.results.length || i < 0)
           return;
-          
+
         set_selection(i);
         last_selected_value = update_model_value();
         $scope.show_autocomplete = false;
-        
+
         current_options.on_select && current_options.on_select($scope.results[$scope.selected_index]);
       };
 
@@ -249,9 +249,9 @@ angular
             case KEYS.ENTER:
               // Accept a selection only if results exists, the menu is
               // displayed and the results are valid (no current request
-              // for new suggestions is active).              
-              if ($scope.show_autocomplete && 
-                  $scope.selected_index > 0 && 
+              // for new suggestions is active).
+              if ($scope.show_autocomplete &&
+                  $scope.selected_index > 0 &&
                   !$scope.waiting_for_suggestion)
               {
                 $scope.apply_selection($scope.selected_index);
@@ -262,7 +262,7 @@ angular
                 // the event was registered on the input it self.
                 e.stopPropagation();
               }
-              
+
               $scope.show_autocomplete = false;
               $scope.$apply();
               break;
