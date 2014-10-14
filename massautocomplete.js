@@ -8,11 +8,11 @@ angular.module('MassAutoComplete', [])
     transclude: true,
     template:
       '<div ng-transclude></div>' +
-      '<div class="ac-container" ng-show="show_autocomplete && results.length" style="position:absolute;">' +
+      '<div class="ac-container" ng-show="show_autocomplete && results.length > 0" style="position:absolute;">' +
       '  <ul class="ac-menu">' +
       '    <li ng-repeat="result in results" ng-if="$index > 0"' +
       '        class="ac-menu-item" ng-class="$index == selected_index ? \'ac-state-focus\': \'\'">' +
-      '      <a href ng-click="apply_selection($index,$event)" ng-bind-html=result.label> </a>' +
+      '      <a href ng-click="apply_selection($index, $event)" ng-bind-html=result.label></a>' +
       '    </li>' +
       '  </ul>' +
       '</div>',
@@ -30,7 +30,7 @@ angular.module('MassAutoComplete', [])
         DOWN: 40
       };
 
-      // Create events in a unique autocomplete namespace
+      // Create events in a unique autocomplete namespace.
       var EVENTS = {
         KEYDOWN: 'keydown.ac' + $scope.$id,
         RESIZE: 'resize.ac' + $scope.$id,
@@ -52,7 +52,7 @@ angular.module('MassAutoComplete', [])
           value_watch,
           last_selected_value;
 
-      $scope.show_autocomplete  = false;
+      $scope.show_autocomplete = false;
 
       // Debounce - taken from underscore
       function debounce(func, wait, immediate) {
@@ -83,14 +83,14 @@ angular.module('MassAutoComplete', [])
       };
       var position_autocomplete = debounce(_position_autocomplete, user_options.debounce_position);
 
-      // Attach autocomplete behaviour to an input element
+      // Attach autocomplete behaviour to an input element.
       function _attach(ngmodel, target_element, options) {
-        // Element is already attached
+        // Element is already attached.
         if (current_element === target_element) return;
-        // safe: clear previously attached elements
+        // Safe: clear previously attached elements.
         if (current_element) that.detach();
-        // The element is still the active element
-        if (target_element[0] !== $document[0].activeElement ) return;
+        // The element is still the active element.
+        if (target_element[0] !== $document[0].activeElement) return;
 
         options.on_attach && options.on_attach();
 
@@ -110,7 +110,7 @@ angular.module('MassAutoComplete', [])
           function (nv, ov) {
             // Prevent suggestion cycle when the value is the last value selected.
             // When selecting from the menu the ng-model is updated and this watch
-            // is triggered. This cause another suggestion cycle that will provide as
+            // is triggered. This causes another suggestion cycle that will provide as
             // suggestion the value that is currently selected - this is unnecessary.
             if (nv === last_selected_value)
               return;
@@ -135,7 +135,7 @@ angular.module('MassAutoComplete', [])
             function suggest_succeeded(suggestions) {
               // Add the original term as the first value to enable the user
               // to return to his original expression after suggestions were made.
-              if (suggestions && suggestions.length) {
+              if (suggestions && suggestions.length > 0) {
                 $scope.results = [{ value: term, label: ''}].concat(suggestions);
                 $scope.show_autocomplete = true;
               } else {
@@ -145,7 +145,7 @@ angular.module('MassAutoComplete', [])
             function suggest_failed(error) {
               current_options.on_error && current_options.on_error(error);
             }
-          ).finally( function suggest_finally() {
+          ).finally(function suggest_finally() {
             $scope.waiting_for_suggestion = false;
           });
         } else {
@@ -156,14 +156,14 @@ angular.module('MassAutoComplete', [])
       var suggest = debounce(_suggest, user_options.debounce_suggest);
 
       // Trigger end of editing and remove all attachments made by
-      // this directive to the input element
+      // this directive to the input element.
       that.detach = function () {
         if (current_element) {
           update_model_value();
           current_options.on_detach && current_options.on_detach(current_element.val());
         }
 
-        // Clear references and events
+        // Clear references and events.
         $scope.show_autocomplete = false;
         current_element.unbind(EVENTS.KEYDOWN);
         current_element.unbind(EVENTS.BLUR);
@@ -173,7 +173,7 @@ angular.module('MassAutoComplete', [])
         current_model = current_element = previous_value = undefined;
       };
 
-      // Update angular's model view value
+      // Update angular's model view value.
       // It is important that before triggering hooks the model's view
       // value will be synced with the visible value to the user. This will
       // allow the consumer controller to rely on its local ng-model.
@@ -186,7 +186,7 @@ angular.module('MassAutoComplete', [])
         return val;
       }
 
-      // Set the current selection while navigating through the menu
+      // Set the current selection while navigating through the menu.
       function set_selection(i) {
         // We use jquery val instead of setting the model's view value
         // because we watch the model value and setting it will trigger
@@ -199,7 +199,6 @@ angular.module('MassAutoComplete', [])
       // When selecting from the menu directly (using click or touch) the
       // selection is directly applied.
       $scope.apply_selection = function (i) {
-        // Set focus back on to the input
         current_element.focus();
 
         if (!$scope.show_autocomplete || i > $scope.results.length || i < 0)
@@ -216,7 +215,7 @@ angular.module('MassAutoComplete', [])
         angular.element($window).bind(EVENTS.RESIZE, position_autocomplete);
 
         current_element.bind(EVENTS.BLUR, function () {
-          // Detach the element from the auto complete when input losses focus.
+          // Detach the element from the auto complete when input loses focus.
           // Focus is lost when a selection is made from the auto complete menu
           // using the mouse (or touch). In that case we don't want to detach so
           // we wait several ms for the input to regain focus.
@@ -227,7 +226,7 @@ angular.module('MassAutoComplete', [])
         });
 
         current_element.bind(EVENTS.KEYDOWN, function (e) {
-          // Reserve key combinations with shift for different purposes
+          // Reserve key combinations with shift for different purposes.
           if (e.shiftKey) return;
 
           switch (e.keyCode) {
@@ -242,10 +241,10 @@ angular.module('MassAutoComplete', [])
               }
               break;
 
-            // Select an element and close the menu
-            // Or, if a selection is unavailable let the event propagate
+            // Select an element and close the menu. Or, if a selection is
+            // unavailable let the event propagate.
             case KEYS.ENTER:
-              // Accept a selection only if results exists, the menu is
+              // Accept a selection only if results exist, the menu is
               // displayed and the results are valid (no current request
               // for new suggestions is active).
               if ($scope.show_autocomplete &&
@@ -255,7 +254,7 @@ angular.module('MassAutoComplete', [])
                 // When selecting an item from the AC list the focus is set on
                 // the input element. So the enter will cause a keypress event
                 // on the input itself. Since this enter is not intended for the
-                // input but for the AC result we prevent propgation to parent
+                // input but for the AC result we prevent propagation to parent
                 // elements because this event is not of their concern. We cannot
                 // prevent events from firing when the event was registered on
                 // the input itself.
@@ -266,8 +265,8 @@ angular.module('MassAutoComplete', [])
               $scope.$apply();
               break;
 
-            // Navigate the menu when it's open.
-            // When it's not open fall back to default behavior.
+            // Navigate the menu when it's open. When it's not open fall back
+            // to default behavior.
             case KEYS.TAB:
               if (!$scope.show_autocomplete)
                 break;
@@ -277,11 +276,11 @@ angular.module('MassAutoComplete', [])
 
             // Open the menu when results exists but are not displayed. Or,
             // select the next element when the menu is open. When reaching
-            // bottom wrap to the top.
+            // bottom wrap to top.
             case KEYS.DOWN:
-              if ($scope.results.length) {
+              if ($scope.results.length > 0) {
                 if ($scope.show_autocomplete) {
-                  set_selection($scope.selected_index + 1 > $scope.results.length - 1 ? 0: $scope.selected_index + 1);
+                  set_selection($scope.selected_index + 1 > $scope.results.length - 1 ? 0 : $scope.selected_index + 1);
                 } else {
                   $scope.show_autocomplete = true;
                   $scope.selected_index = 0;
@@ -294,7 +293,7 @@ angular.module('MassAutoComplete', [])
             case KEYS.UP:
               if ($scope.show_autocomplete) {
                 e.preventDefault();
-                set_selection($scope.selected_index - 1 >= 0 ? $scope.selected_index - 1: $scope.results.length - 1);
+                set_selection($scope.selected_index - 1 >= 0 ? $scope.selected_index - 1 : $scope.results.length - 1);
                 $scope.$apply();
               }
               break;
@@ -318,7 +317,7 @@ angular.module('MassAutoComplete', [])
     require: ["^massAutocomplete", "ngModel"],
     scope: false,
     link: function (scope, element, attrs, required) {
-      // prevent html5/browser auto completion
+      // Prevent html5/browser auto completion.
       attrs.$set('autocomplete', 'off');
 
       element.bind('focus', function () {
