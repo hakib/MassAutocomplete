@@ -9,11 +9,11 @@ body {
 
 .main {
   background-color : white;
-  max-width : 800px;
+  max-width : 830px;
   padding-bottom : 30px;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 830px) {
   .main {
     margin-top : 30px;
     margin-bottom : 30px;
