@@ -123,10 +123,10 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
     var q = term.toLowerCase().trim();
     var results = [];
 
-    // Find first 10 states that contain `term`.
+    // Find first 10 states that start with `term`.
     for (var i = 0; i &lt; states.length &amp;&amp; results.length &lt; 10; i++) {
       var state = states[i];
-      if (state.toLowerCase().indexOf(q) !== -1)
+      if (state.toLowerCase().indexOf(q) === 0)
         results.push({ label: state, value: state });
     }
 

@@ -36,7 +36,7 @@ app.controller('mainCtrl', function ($scope, $sce, $q, $timeout) {
 
     for (var i = 0; i < states.length && results.length < 10; i++) {
       var state = states[i];
-      if (state.toLowerCase().indexOf(q) !== -1)
+      if (state.toLowerCase().indexOf(q) == 0)
         results.push({ label: state, value: state });
     }
 
