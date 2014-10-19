@@ -20,6 +20,12 @@ body {
   }
 }
 
+@media screen and (max-width: 830px) {
+  .form-control { 
+    margin-bottom : 10px;
+  }
+}
+
 .container .jumbotron {
   background-color : orangered;
   background : linear-gradient(orangered, rgb(233, 0, 56));
