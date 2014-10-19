@@ -332,7 +332,7 @@ $scope.ac_option_tag_select = {
           <pre><code lang="js">function suggest_state_remote(term) {
   var deferred = $q.defer();
   // Fake remote source using timeout
-  setTimeout(function () {
+  $timeout(function () {
     deferred.resolve(suggest_state(term));
   }, 500);
   return deferred.promise;

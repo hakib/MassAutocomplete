@@ -6,7 +6,7 @@ $(function () {
 
 var app = angular.module('app', ['ngSanitize', 'MassAutoComplete']);
 
-app.controller('mainCtrl', function ($scope, $sce, $q) {
+app.controller('mainCtrl', function ($scope, $sce, $q, $timeout) {
   $scope.dirty = {};
 
   $scope.ac_container_options = {
@@ -127,7 +127,7 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
   function suggest_state_remote(term) {
     var deferred = $q.defer();
     // Fake remote source using timeout
-    setTimeout(function () {
+    $timeout(function () {
       deferred.resolve(suggest_state(term));
     }, 500);
     return deferred.promise;
