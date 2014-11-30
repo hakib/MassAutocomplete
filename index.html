@@ -63,6 +63,7 @@
     <table class="table table-bordered">
       <tr> <th> Dependencies </th> <td> jQuery, Angular, Angular-Sanitize </td> </tr>
       <tr> <th> Size </th> <td> 12kb, 5.8kb minified </td></tr>
+      <tr> <th> Bower </th> <td> <code> bower install angular-mass-autocomplete </code> </td> </tr> </table>
     </table>
 
     <h4> Directive </h4>
@@ -415,10 +416,10 @@ $scope.ac_options_users = {
 
      <hr>
      <script src="https://rawgithub.com/krisk/Fuse/master/src/fuse.js"></script>
-     <h4> Fuzzy search <h4> 
+     <h4> Fuzzy search <h4>
      <h5> Implement searching and ranking using <a href="http://kiro.me/projects/fuse.html" rel="nofollow">Fuse.js</a>. Try searching <i>sauth</i> or <i>rod iland</i>.</h5>
-     <div class="row"> 
-      <div class="col-sm-4"> 
+     <div class="row">
+      <div class="col-sm-4">
         <input type="text"
                class="form-control"
                placeholder="Select State"
@@ -427,16 +428,16 @@ $scope.ac_options_users = {
 
       </div>
       <div class="col-sm-8">
-<pre><code lang="js"> 
+<pre><code lang="js">
 var fuzzySearch = new Fuse(states, {
-  shouldSort: true, 
+  shouldSort: true,
   includeScore: true,
   caseSensitive: false,
-  id: false, 
+  id: false,
   threshold : 0.4,
 });
 
-function fuzzy_suggest (term) { 
+function fuzzy_suggest (term) {
   if (!!!term)
     return [];
 
@@ -445,28 +446,28 @@ function fuzzy_suggest (term) {
     .slice(0,5)
     .map(function(i) {
       var val = states[i.item];
-      return { 
-        value: val, 
+      return {
+        value: val,
         label: $sce.trustAsHtml(
-          '&lt;div class="container-fluid"&gt;' + 
+          '&lt;div class="container-fluid"&gt;' +
           '  &lt;div class="pull-left"&gt;' + highlight(val,term) + '&lt;/div&gt;' +
           '  &lt;div class="pull-right"&gt;&lt;span class="badge text-muted"&gt;' +
-              (Math.round(i.score * 100) / 100) + 
-          '  &lt;/span&gt;&lt;/div&gt;' + 
+              (Math.round(i.score * 100) / 100) +
+          '  &lt;/span&gt;&lt;/div&gt;' +
           '&lt;/div&gt;')
       };
     });
 }
 
-$scope.ac_fuse_options = { 
+$scope.ac_fuse_options = {
   suggest : fuzzy_suggest
 };
 </code></pre>
       </div>
      </div>
-      
+
      <hr>
-     
+
      <h4> Reusing options </h4>
      <div class="row">
         <div class="col-sm-4">
