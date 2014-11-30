@@ -24,6 +24,17 @@ body {
   .form-control { 
     margin-bottom : 10px;
   }
+  
+  table.table-bordered>tbody>tr>th,
+  table.table-bordered>thead>tr>th,
+  table.table-bordered>tbody>tr>td { 
+    display : block;
+    width : 100%;
+    border : 0;
+  }
+  table th[colspan="2"] { 
+    background-color: #e8e8e8;
+  }
 }
 
 .container .jumbotron {
