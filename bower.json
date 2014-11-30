@@ -1,0 +1,9 @@
+{
+  "name": "angular-mass-autocomplete",
+  "version": "0.1",
+  "main": "massautocomplete.min.js",
+  "ignore": [
+    ".gitignore",
+    "package.json"
+  ]
+}

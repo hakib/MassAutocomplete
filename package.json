@@ -1,5 +1,5 @@
 {
-  "name": "mass-autocomplete",
+  "name": "angular-mass-autocomplete",
   "version": "0.1.0",
   "description": "Autocomplete for Angular.js applications with a lot to complete",
   "main": "massautocomplete.js",
