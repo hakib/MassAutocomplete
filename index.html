@@ -93,7 +93,7 @@
     <h4> HTML </h4>
     <pre><code lang="html">&lt;html&gt;
   &lt;head&gt;
-    &lt;script src="//code.jquery.com/jquery.min.js"&lt;/script&gt;
+    &lt;script src="//code.jquery.com/jquery.min.js"&gt&lt;/script&gt;
     &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"&gt;&lt;/script&gt;
     &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"&gt;&lt;/script&gt;
 
@@ -509,7 +509,7 @@ $scope.ac_options_users = {
       </tr>
       <tr>
         <th> on_attach() </th>
-        <td> Callback fired when the user focuses a field. </td>
+        <td> Callback fired when the user focus a field. </td>
       </tr>
       <tr>
         <th> on_select(selected_item) </th>
@@ -542,13 +542,13 @@ $scope.ac_options_users = {
        We recommend adding <code>backface-visibility: hidden;</code>
        and <code>transform: translate3d(0, 0, 0);</code>
        to <code>.ac-container</code> to limit the paint
-       area to that of the suggestion box.
+       area to that of the suggestion box. See <code> massautocomplete.theme.css </code> for the complete css.
      </p>
 
     <h4> Keyboard </h4>
     <table class="table table-bordered table-condensed">
       <tr>
-        <th><kbd>up</kbd>, <kbd>down</kbd></th>
+        <th><kbd>up</kbd>&nbsp;<kbd>down</kbd></th>
         <td>Previous/Next suggestion</td>
       </tr>
       <tr>
