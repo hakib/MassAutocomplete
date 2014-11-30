@@ -414,7 +414,59 @@ $scope.ac_options_users = {
       </div>
 
      <hr>
+     <script src="https://rawgithub.com/krisk/Fuse/master/src/fuse.js"></script>
+     <h4> Fuzzy search <h4> 
+     <h5> Implement searching and ranking using <a href="http://kiro.me/projects/fuse.html" rel="nofollow">Fuse.js</a>. Try searching <i>sauth</i> or <i>rod iland</i>.</h5>
+     <div class="row"> 
+      <div class="col-sm-4"> 
+        <input type="text"
+               class="form-control"
+               placeholder="Select State"
+               ng-model="dirty.fuse_selection"
+               mass-autocomplete-item="ac_fuse_options">
 
+      </div>
+      <div class="col-sm-8">
+<pre><code lang="js"> 
+var fuzzySearch = new Fuse(states, {
+  shouldSort: true, 
+  includeScore: true,
+  caseSensitive: false,
+  id: false, 
+  threshold : 0.4,
+});
+
+function fuzzy_suggest (term) { 
+  if (!!!term)
+    return [];
+
+  return fuzzySearch
+    .search(term)
+    .slice(0,5)
+    .map(function(i) {
+      var val = states[i.item];
+      return { 
+        value: val, 
+        label: $sce.trustAsHtml(
+          '&lt;div class="container-fluid"&gt;' + 
+          '  &lt;div class="pull-left"&gt;' + highlight(val,term) + '&lt;/div&gt;' +
+          '  &lt;div class="pull-right"&gt;&lt;span class="badge text-muted"&gt;' +
+              (Math.round(i.score * 100) / 100) + 
+          '  &lt;/span&gt;&lt;/div&gt;' + 
+          '&lt;/div&gt;')
+      };
+    });
+}
+
+$scope.ac_fuse_options = { 
+  suggest : fuzzy_suggest
+};
+</code></pre>
+      </div>
+     </div>
+      
+     <hr>
+     
      <h4> Reusing options </h4>
      <div class="row">
         <div class="col-sm-4">

@@ -122,7 +122,40 @@ app.controller('mainCtrl', function ($scope, $sce, $q, $timeout) {
     on_select: add_tag
   };
 
+  
+  // Fuse - linking ranking and searching
+  var fuzzySearch = new Fuse(states, {
+    shouldSort: true, 
+    includeScore: true,
+    caseSensitive: false,
+    id: false, 
+    threshold : 0.4,
+  });
+  
+  function fuzzy_suggest (term) { 
+    if (!!!term)
+      return [];
 
+    return fuzzySearch
+      .search(term)
+      .slice(0,5)
+      .map(function(i) {
+        var val = states[i.item];
+        return { 
+          value: val, 
+          label: $sce.trustAsHtml(
+            '<div class="container-fluid">' + 
+            ' <div class="pull-left">' + highlight(val,term) + '</div>' + 
+            ' <div class="pull-right"><span class="badge text-muted">' + (Math.round(i.score * 100) / 100) + '</span></div>' + 
+            '</div>')
+        };
+      });
+  }
+  
+  $scope.ac_fuse_options = { 
+    suggest : fuzzy_suggest
+  };
+  
   // Remote Source
   function suggest_state_remote(term) {
     var deferred = $q.defer();
