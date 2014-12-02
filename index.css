@@ -20,6 +20,13 @@ body {
   }
 }
 
+code { 
+  min-width : 800px;
+}
+.col-sm-8 > pre > code { 
+  min-width : 530px;
+}
+
 @media screen and (max-width: 830px) {
   .form-control { 
     margin-bottom : 10px;
