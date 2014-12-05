@@ -2,7 +2,6 @@
 <html>
 <head>
 
-
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://rawgithub.com/isagalaev/highlight.js/master/src/styles/hybrid.css">
   <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -418,12 +417,12 @@ $scope.ac_option_remote = {
         <div class="col-sm-8">
           <pre><code lang="js">var users = [
   {name: 'Haki', joined: '2 month ago', email: 'Haki@email.com'},
-  {name: 'Ran', joined: '1 year ago', email: 'Ran123@ac.org'},
+  {name: 'Ran', joined: '2 days ago', email: 'Ran123@ac.org'},
   {name: 'John', joined: 'a week ago', email: 'JJ@gmail.com'},
-  {name: 'Marry', joined: '1 month ago', email: 'MarryLove@yahoo.com'},
-  {name: 'Charlie', joined: 'Just now', email: 'Charlie1987@msn.com'},
-  {name: 'Rebecca', joined: '2 days ago', email: 'Rebecca@mail.com'},
-  {name: 'James', joined: '3 month ago', email: '-'}
+  {name: 'Marry', joined: 'Yesterday', email: 'Marry@yahoo.com'},
+  {name: 'Charlie', joined: 'Just now', email: 'Charlie@msn.com'},
+  {name: 'Rebecca', joined: 'Yesterday', email: 'Becky@mail.com'},
+  {name: 'James', joined: '3 month ago', email: 'James@inbox.com'}
 ];
 
 function suggest_users(term) {
@@ -441,15 +440,15 @@ function suggest_users(term) {
          label: $sce.trustAsHtml(
            '&lt;div class="row"&gt;' +
            ' &lt;div class="col-xs-5"&gt;' +
-           '   &lt;i class="fa fa-user"&gt;&lt;/i&gt;' +
-           '   &lt;strong&gt;' + highlight(user.name, term) + '&lt;/strong&gt;' +
+           '  &lt;i class="fa fa-user"&gt;&lt;/i&gt;' +
+           '  &lt;strong&gt;' + highlight(user.name,term) + '&lt;/strong&gt;'+
            ' &lt;/div&gt;' +
            ' &lt;div class="col-xs-7 text-right text-muted"&gt;' +
-           '   &lt;small&gt;' + highlight(user.email, term) + '&lt;/small&gt;' +
+           '  &lt;small&gt;' + highlight(user.email,term) + '&lt;/small&gt;' +
            ' &lt;/div&gt;' +
            ' &lt;div class="col-xs-12"&gt;' +
-           '   &lt;span class="text-muted"&gt;Joined&lt;/span&gt;' +
-               user.joined +
+           '  &lt;span class="text-muted"&gt;Joined&lt;/span&gt;' +
+              user.joined +
            ' &lt;/div&gt;' +
            '&lt;/div&gt;'
          )
@@ -645,5 +644,6 @@ $scope.ac_options_users = {
       }
     });
   });
+
 </script>
 </html>
