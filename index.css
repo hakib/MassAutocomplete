@@ -21,26 +21,26 @@ body {
   }
 }
 
-code { 
+code {
   min-width : 800px;
 }
-.col-sm-8 > pre > code { 
+.col-sm-8 > pre > code {
   min-width : 530px;
 }
 
 @media screen and (max-width: 830px) {
-  .form-control { 
+  .form-control {
     margin-bottom : 10px;
   }
-  
+
   table.table-bordered>tbody>tr>th,
   table.table-bordered>thead>tr>th,
-  table.table-bordered>tbody>tr>td { 
+  table.table-bordered>tbody>tr>td {
     display : block;
     width : 100%;
     border : 0;
   }
-  table th[colspan="2"] { 
+  table th[colspan="2"] {
     background-color: #e8e8e8;
   }
 }
@@ -62,7 +62,7 @@ h3 {
   color : orangered;
 }
 
-h4 { 
+h4 {
   margin-top : 25px;
 }
 
