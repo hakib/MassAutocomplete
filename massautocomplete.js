@@ -216,10 +216,11 @@ angular.module('MassAutoComplete', [])
           // Focus is lost when a selection is made from the auto complete menu
           // using the mouse (or touch). In that case we don't want to detach so
           // we wait several ms for the input to regain focus.
-          $timeout(function() {
-            if (!current_element || current_element[0] !== $document[0].activeElement)
-              that.detach();
-          }, user_options.debounce_blur);
+          if (!$scope.show_autocomplete)
+            $timeout(function() {
+              if (!current_element || current_element[0] !== $document[0].activeElement)
+                that.detach();
+            }, user_options.debounce_blur);
         });
 
         current_element.bind(EVENTS.KEYDOWN, function (e) {
