@@ -631,7 +631,9 @@ $scope.ac_options_users = {
 
 </body>
 <script>
+
   $(function() {
+    hljs.initHighlightingOnLoad();
     $('[mass-autocomplete-item]').each(function(i,elm) {
       $(elm).one('focus', function(e) {
         ga('send', 'event', 'autocomplete-item', 'focus', $(e.target).attr('mass-autocomplete-item'), 1);

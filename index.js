@@ -1,9 +1,5 @@
 "use strict";
 
-$(function () {
-  hljs.initHighlightingOnLoad();
-});
-
 var app = angular.module('app', ['ngSanitize', 'MassAutoComplete']);
 
 app.controller('mainCtrl', function ($scope, $sce, $q, $timeout) {
