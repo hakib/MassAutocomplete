@@ -5,6 +5,7 @@ body {
   background-color : #e8e8e8;
   background : radial-gradient(circle, #f4f4f4, #e4e4e4);
   background-attachment : fixed;
+  font-size : 15px;
 }
 
 .main {
