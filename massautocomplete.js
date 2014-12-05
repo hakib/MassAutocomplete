@@ -17,7 +17,7 @@ angular.module('MassAutoComplete', [])
       '  </ul>' +
       '</div>',
     link: function (scope, element) {
-      scope.container = element.find('.ac-container');
+      scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
     },
     controller: ["$scope", function ($scope) {
       var that = this;
@@ -30,11 +30,10 @@ angular.module('MassAutoComplete', [])
         DOWN: 40
       };
 
-      // Create events in a unique autocomplete namespace.
       var EVENTS = {
-        KEYDOWN: 'keydown.ac' + $scope.$id,
-        RESIZE: 'resize.ac' + $scope.$id,
-        BLUR: 'blur.ac' + $scope.$id
+        KEYDOWN: 'keydown',
+        RESIZE: 'resize',
+        BLUR: 'blur'
       };
 
       var _user_options = $scope.options() || {};
@@ -71,16 +70,15 @@ angular.module('MassAutoComplete', [])
       }
 
       function _position_autocomplete() {
-        var pos = current_element.offset(),     // Top & left including scroll
-            h = current_element.outerHeight(),  // Height including inner padding & border
-            w = current_element.outerWidth();   // Width including inner padding & border
+        var rect = current_element[0].getBoundingClientRect(),
+            scrollTop = $document[0].body.scrollTop || $document[0].documentElement.scrollTop || $window.pageYOffset,
+            scrollLeft = $document[0].body.scrollLeft || $document[0].documentElement.scrollLeft || $window.pageXOffset,
+            container = $scope.container[0];
 
-        $scope.container.css({
-          top: pos.top + h,
-          left: pos.left,
-          width: w
-        });
-      };
+        container.style.top = rect.top + rect.height + scrollTop + 'px';
+        container.style.left = rect.left + scrollLeft + 'px';
+        container.style.width = rect.width + 'px';
+      }
       var position_autocomplete = debounce(_position_autocomplete, user_options.debounce_position);
 
       // Attach autocomplete behaviour to an input element.
@@ -199,8 +197,7 @@ angular.module('MassAutoComplete', [])
       // When selecting from the menu directly (using click or touch) the
       // selection is directly applied.
       $scope.apply_selection = function (i) {
-        current_element.focus();
-
+        current_element[0].focus();
         if (!$scope.show_autocomplete || i > $scope.results.length || i < 0)
           return;
 
