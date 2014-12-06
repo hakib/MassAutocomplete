@@ -146,18 +146,13 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
       wrapping the input field and appending a suggestion box along with several
       watches. This is fine as long as you want to auto-complete only one or two
       inputs. But, when there are several dozen inputs, the memory, DOM and watch
-      count will start to bloat and might impact performance.
-    </p>
-    <p>
-      For example, <a href="http://angular-ui.github.io/bootstrap/#/typeahead" rel="nofollow">angular-ui typehead</a>
-      creates 4 watches per input field: 10 input fields result in 40
-      watches; a 100 fields (a 10x10 grid) result in 400 watches.
+      count will start to bloat and that might impact performance.
     </p>
 
     <h4> A different approach </h4>
     <p>
       MassAutocomplete was implemented with a different approach in mind.
-      Instead of attaching the suggestion box to each input field, We use
+      Instead of attaching the suggestion box to each input field, we use
       transclusion to maintain only one box for the entire document. This
       approach guarantees that additional input fields will not require
       additional DOM or watches for the purpose of the auto complete.
@@ -165,6 +160,30 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
     <p>
       MassAutocomplete does not provide filtering, linking, ranking or sorting.
       Generating the suggestions is left to the application.
+    </p>
+
+    <h4> Comparing implementations </h4>
+    <p>
+      To illustrate the benefits of the different approach we compare mass-autocomplete with the popular
+      <a href="http://angular-ui.github.io/bootstrap/#/typeahead" rel="nofollow">angular-ui typehead</a>.
+      We use the amount of watches and the total time the app spent digesting as measures.
+    </p>
+    <p>
+      Our main goal is to keep the number of digest execution to a minimum and to make them as fast as possible.
+      To reduce the amount of digest executions we first need to make sure it's triggered only when truly necessary.
+      To reduce the digest time we want to make sure the evaluated expressions are simple and fast,
+      and keep the watch count to a minimum.
+    </p>
+    <div class="benchmarks row">
+      <div class="col-sm-12 col-md-6">
+        <a href="http://jsbin.com/lumalo/1/embed?output" class="jsbin-embed">Mass autocomplete benchmark</a>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <a href="http://jsbin.com/cemoso/1/embed?output" class="jsbin-embed">UI Typehead benchmark</a>
+      </div>
+    </div>
+    <p>
+
     </p>
 
     <hr>
@@ -629,6 +648,7 @@ $scope.ac_options_users = {
   <script src="massautocomplete.js"></script>
   <script src="index.js"></script>
 
+  <script src="http://static.jsbin.com/js/embed.js"></script>
 </body>
 <script>
 
