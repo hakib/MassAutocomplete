@@ -175,22 +175,22 @@ angular.module('MassAutoComplete', [])
       // It is important that before triggering hooks the model's view
       // value will be synced with the visible value to the user. This will
       // allow the consumer controller to rely on its local ng-model.
-      function update_model_value() {
-        var val = current_element.val();
-        if (current_model.$modelValue !== val) {
-          current_model.$setViewValue(val);
+      function update_model_value(value) {
+        if (current_model.$modelValue !== value) {
+          current_model.$setViewValue(value);
           current_model.$render();
         }
-        return val;
       }
 
       // Set the current selection while navigating through the menu.
       function set_selection(i) {
-        // We use jquery val instead of setting the model's view value
+        // We use value instead of setting the model's view value
         // because we watch the model value and setting it will trigger
         // a new suggestion cycle.
-        current_element.val($scope.results[i].value);
+        var selected = $scope.results[i];
+        current_element.val(selected.value);
         $scope.selected_index = i;
+        return selected;
       }
 
       // Apply and accept the current selection made from the menu.
@@ -201,8 +201,9 @@ angular.module('MassAutoComplete', [])
         if (!$scope.show_autocomplete || i > $scope.results.length || i < 0)
           return;
 
-        set_selection(i);
-        last_selected_value = update_model_value();
+        var selected = set_selection(i);
+        last_selected_value = selected.value;
+        update_model_value(selected.value);
         $scope.show_autocomplete = false;
 
         current_options.on_select && current_options.on_select($scope.results[$scope.selected_index]);
