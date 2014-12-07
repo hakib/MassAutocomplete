@@ -159,12 +159,12 @@ angular.module('MassAutoComplete', [])
         if (current_element) {
           update_model_value();
           current_options.on_detach && current_options.on_detach(current_element.val());
+          current_element.unbind(EVENTS.KEYDOWN);
+          current_element.unbind(EVENTS.BLUR);
         }
 
         // Clear references and events.
         $scope.show_autocomplete = false;
-        current_element.unbind(EVENTS.KEYDOWN);
-        current_element.unbind(EVENTS.BLUR);
         angular.element($window).unbind(EVENTS.RESIZE);
         value_watch();
         $scope.selected_index = $scope.results = undefined;
