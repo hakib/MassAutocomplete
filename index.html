@@ -215,24 +215,24 @@ var fuzzySearch = new Fuse(states, {
   includeScore: true,
   caseSensitive: false,
   id: false,
-  threshold : 0.4,
+  threshold: 0.4,
 });
 
-function fuzzy_suggest (term) {
-  if (!!!term)
+function fuzzy_suggest(term) {
+  if (!term)
     return [];
 
   return fuzzySearch
     .search(term)
-    .slice(0,10)
-    .map(function(i) {
+    .slice(0, 10)
+    .map(function (i) {
       var val = states[i.item];
       return {
         value: val,
         label: $sce.trustAsHtml(
           '&lt;div class="container-fluid"&gt;' +
           '  &lt;div class="pull-left"&gt;' +
-               highlight(val,term) +
+               highlight(val, term) +
           '  &lt;/div&gt;' +
           '  &lt;div class="pull-right"&gt; ' +
           '   &lt;span class="badge"&gt;' +
@@ -245,7 +245,7 @@ function fuzzy_suggest (term) {
 }
 
 $scope.ac_fuse_options = {
-  suggest : fuzzy_suggest
+  suggest: fuzzy_suggest
 };
 </code></pre>
       </div>
@@ -274,7 +274,7 @@ function suggest_state_with_highlight(term) {
     return;
 
   var suggestions = suggest_state(term);
-  suggestions.forEach(function(s) {
+  suggestions.forEach(function (s) {
     // In real life you should reuse the regexp object.
     s.label = $sce.trustAsHtml(highlight(s.label, term));
   });
@@ -306,7 +306,7 @@ $scope.ac_option_highlight = {
       rhs = term.substring(ix + 1),
       suggestions = suggest_state(rhs);
 
-  suggestions.forEach(function(s) {
+  suggestions.forEach(function (s) {
     s.value = lhs + s.value;
   });
 
@@ -333,7 +333,7 @@ $scope.ac_option_delimited = {
         <div class="col-sm-8">
           <pre><code lang="js">function suggest_state_as_tag(term) {
   var suggestions = suggest_state_delimited(term);
-  suggestions.forEach(function(s) {
+  suggestions.forEach(function (s) {
     s.label = $sce.trustAsHtml(
       '&lt;span class="badge"&gt;' + s.label + '&lt;/span&gt;'
     );
@@ -438,7 +438,7 @@ $scope.ac_option_remote = {
   {name: 'Haki', joined: '2 month ago', email: 'Haki@email.com'},
   {name: 'Ran', joined: '2 days ago', email: 'Ran123@ac.org'},
   {name: 'John', joined: 'a week ago', email: 'JJ@gmail.com'},
-  {name: 'Marry', joined: 'Yesterday', email: 'Marry@yahoo.com'},
+  {name: 'Mary', joined: 'Yesterday', email: 'Mary@yahoo.com'},
   {name: 'Charlie', joined: 'Just now', email: 'Charlie@msn.com'},
   {name: 'Rebecca', joined: 'Yesterday', email: 'Becky@mail.com'},
   {name: 'James', joined: '3 month ago', email: 'James@inbox.com'}
@@ -614,7 +614,7 @@ $scope.ac_options_users = {
        We recommend adding <code>backface-visibility: hidden;</code>
        and <code>transform: translate3d(0, 0, 0);</code>
        to <code>.ac-container</code> to limit the paint
-       area to that of the suggestion box. See <code> massautocomplete.theme.css </code> for the complete css.
+       area to that of the suggestion box. See <code> massautocomplete.theme.css </code> for the complete CSS.
      </p>
 
     <h4> Keyboard </h4>
@@ -653,14 +653,14 @@ $scope.ac_options_users = {
 </body>
 <script>
 
-  $(function() {
+  $(function () {
     hljs.initHighlightingOnLoad();
-    $('[mass-autocomplete-item]').each(function(i,elm) {
-      $(elm).one('focus', function(e) {
+    $('[mass-autocomplete-item]').each(function (i, elm) {
+      $(elm).one('focus', function (e) {
         ga('send', 'event', 'autocomplete-item', 'focus', $(e.target).attr('mass-autocomplete-item'), 1);
       });
     });
-    $(window).scroll(function() {
+    $(window).scroll(function () {
       if($(window).scrollTop() + $(window).height() == $(document).height()) {
         ga('send', 'event', 'window', 'scroll', 'bottom', 1);
         $(window).unbind('scroll');

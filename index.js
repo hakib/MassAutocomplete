@@ -129,19 +129,19 @@ app.controller('mainCtrl', function ($scope, $sce, $q, $timeout) {
   });
 
   function fuzzy_suggest (term) {
-    if (!!!term)
+    if (!term)
       return [];
 
     return fuzzySearch
       .search(term)
-      .slice(0,10)
-      .map(function(i) {
+      .slice(0, 10)
+      .map(function (i) {
         var val = states[i.item];
         return {
           value: val,
           label: $sce.trustAsHtml(
             '<div class="container-fluid">' +
-            ' <div class="pull-left">' + highlight(val,term) + '</div>' +
+            ' <div class="pull-left">' + highlight(val, term) + '</div>' +
             ' <div class="pull-right"><span class="badge">' + (Math.round(i.score * 100) / 100) + '</span></div>' +
             '</div>')
         };
@@ -173,10 +173,10 @@ app.controller('mainCtrl', function ($scope, $sce, $q, $timeout) {
     {name: 'Haki', joined: '2 month ago', email: 'Haki@email.com'},
     {name: 'Ran', joined: '1 year ago', email: 'Ran123@ac.org'},
     {name: 'John', joined: 'a week ago', email: 'JJ@gmail.com'},
-    {name: 'Marry', joined: '1 month ago', email: 'MarryLove@yahoo.com'},
+    {name: 'Mary', joined: '1 month ago', email: 'Mary@yahoo.com'},
     {name: 'Charlie', joined: 'Just now', email: 'Charlie1987@msn.com'},
-    {name: 'Rebeca', joined: '2 days ago', email: 'Rebeca@mail.com'},
-    {name: 'James', joined: '3 month ago', email: '-'}
+    {name: 'Rebecca', joined: '2 days ago', email: 'Becky@mail.com'},
+    {name: 'James', joined: '3 month ago', email: 'James@inbox.com'}
   ];
 
   function suggest_users(term) {
