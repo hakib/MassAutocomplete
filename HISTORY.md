@@ -1,6 +1,11 @@
 MassAutocomplete
 ================
 
+### v0.2.1
+- Don't clear value on detach (issue #6).
+- Fixed bug causing values to be cleared on detach.
+- Moved to semantic versioning.
+
 ### v0.2
 - Dropped jquery dependency (issue #1).
 - Fixed Long press on menu item does not select the item.
