@@ -36,6 +36,7 @@
           <li> <a href="#motivation"> Motivation </a> </li>
           <li> <a href="#examples"> Examples </a> </li>
           <li> <a href="#options"> Options </a> </li>
+          <li> <a href="benchmark.html"> Performance </a> </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li> <a href="https://github.com/hakib/MassAutocomplete"> <i class="fa fa-github text-muted fa-2x"></i> </a> </li>
@@ -160,33 +161,17 @@ app.controller('mainCtrl', function ($scope, $sce, $q) {
       MassAutocomplete does not provide filtering, linking, ranking or sorting.
       Generating the suggestions is left to the application.
     </p>
-
+  
     <h4> Comparing implementations </h4>
-    <p>
-      To illustrate the benefits of the different approach we compare mass-autocomplete with the popular
-      <a href="http://angular-ui.github.io/bootstrap/#/typeahead" rel="nofollow">angular-ui typehead</a>.
-      We use the amount of watches and the total time the app spent digesting as measures.
+    <p> 
+      We performed a comparison between mass-autocomplete and the popular ui-typehead.
     </p>
     <p>
-      Our main goal is to keep the number of digest execution to a minimum and to make them as fast as possible.
-      To reduce the amount of digest executions we first need to make sure it's triggered only when truly necessary.
-      To reduce the digest time we want to make sure the evaluated expressions are simple and fast,
-      and keep the watch count to a minimum.
+      <a href="/benchmark.html"> <strong> The results are  here. </strong> </a>
     </p>
-    <div class="benchmarks row">
-      <div class="col-sm-12 col-md-6">
-        <a href="http://jsbin.com/lumalo/1/embed?output" class="jsbin-embed">Mass autocomplete benchmark</a>
-      </div>
-      <div class="col-sm-12 col-md-6">
-        <a href="http://jsbin.com/cemoso/1/embed?output" class="jsbin-embed">UI Typehead benchmark</a>
-      </div>
-    </div>
-    <p>
-
-    </p>
-
+    
     <hr>
-
+    
     <h3 id="examples"> Examples </h3>
       <p>
         All examples in this section are using just one <code>mass-autocomplete</code>
@@ -647,7 +632,6 @@ $scope.ac_options_users = {
   <script src="massautocomplete.js"></script>
   <script src="index.js"></script>
 
-  <script src="http://static.jsbin.com/js/embed.js"></script>
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </body>
 <script>

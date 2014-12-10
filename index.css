@@ -89,12 +89,12 @@ th {
 .benchmarks iframe {
   border: 1px solid #333;
   padding: 0;
-  height : 600px;
+  min-height : 800px!important;
 }
 
 @media screen and (max-width: 992px) {
   .benchmarks iframe {
-    height : 300px;
+    min-height : 300px!important;
   }
 }
 

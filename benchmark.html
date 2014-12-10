@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css">  
+  <link rel="stylesheet" href="https://rawgithub.com/isagalaev/highlight.js/master/src/styles/hybrid.css">
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="massautocomplete.theme.css">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+  <title>MassAutocomplete | Autocomplete for Angular.js applications with a lot to complete</title>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-55665057-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+<body> 
+	<div ng-controller="mainCtrl" class="container main">
+		<div class="jumbotron row">
+		  <h2>MassAutocomplete</h2>
+		  <div> Autocomplete for Angular.js applications with a lot to complete </div>
+		</div>
+
+		<nav class="navbar navbar-default navbar-inverse row" role="navigation">
+		  <div class="container-fluid">
+			<ul class="nav navbar-nav navbar-left">
+			  <li> <a href="/#usage"> Usage </a> </li>
+			  <li> <a href="/#motivation"> Motivation </a> </li>
+			  <li> <a href="/#examples"> Examples </a> </li>
+			  <li> <a href="/#options"> Options </a> </li>
+			  <li> <a href="#"> Performance </a> </li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			  <li> <a href="https://github.com/hakib/MassAutocomplete"> <i class="fa fa-github text-muted fa-2x"></i> </a> </li>
+			  <li>
+				<a href="https://angularjs.org/" rel="nofollow">
+				  <img src="AngularJS-Shield-small.png" alt="Angular.js homepage" height="25px">
+				</a>
+			  </li>
+			  <li> <a href="https://twitter.com/share" class="twitter-share-button" data-via="be_haki" data-count="none" data-hashtags="AngularJS">Tweet</a> </li>
+			</ul>
+		  </div>
+		</nav>
+    
+    <div>
+      <p>
+        To illustrate the benefits of the different approach we compare mass-autocomplete with the popular
+        <a href="http://angular-ui.github.io/bootstrap/#/typeahead" rel="nofollow">angular-ui typehead</a>.
+        We use the amount of watches and the total time the app spent digesting as measures.
+      </p>
+      <p>
+        Our main goal is to keep the number of digest execution to a minimum and to make them as fast as possible.
+        To reduce the amount of digest executions we first need to make sure it's triggered only when truly necessary.
+        To reduce the digest time we want to make sure the evaluated expressions are simple and fast,
+        and keep the watch count to a minimum.
+      </p>    
+    </div>
+   
+    <div class="benchmarks row">
+      <div class="col-sm-12 col-md-6">
+        <a href="http://jsbin.com/lumalo/1/embed?output" class="jsbin-embed">Mass autocomplete benchmark</a>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <a href="http://jsbin.com/cemoso/1/embed?output" class="jsbin-embed">UI Typehead benchmark</a>
+      </div>
+    </div>
+    
+  </div>
+  
+  <script src="http://static.jsbin.com/js/embed.js"></script>
+  <a href="https://github.com/hakib/MassAutocomplete"><img style="position: absolute; top: 0; right: 0; border: 0; width: 120px;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  
+</body> 
+</html>
