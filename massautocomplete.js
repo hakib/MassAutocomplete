@@ -159,8 +159,9 @@ angular.module('MassAutoComplete', [])
       // this directive to the input element.
       that.detach = function () {
         if (current_element) {
-          update_model_value();
-          current_options.on_detach && current_options.on_detach(current_element.val());
+          var value = current_element.val();
+          update_model_value(value);
+          current_options.on_detach && current_options.on_detach(value);
           current_element.unbind(EVENTS.KEYDOWN);
           current_element.unbind(EVENTS.BLUR);
         }
