@@ -10,8 +10,10 @@ body {
 
 .main {
   background-color : white;
-  max-width : 900px;
   padding-bottom : 30px;
+}
+.slim { 
+  max-width : 900px;
 }
 
 @media screen and (min-width: 830px) {
