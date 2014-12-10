@@ -207,7 +207,7 @@ angular.module('MassAutoComplete', [])
         update_model_value(selected.value);
         $scope.show_autocomplete = false;
 
-        current_options.on_select && current_options.on_select($scope.results[$scope.selected_index]);
+        current_options.on_select && current_options.on_select(selected);
       };
 
       function bind_element() {
