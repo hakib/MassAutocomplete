@@ -169,7 +169,7 @@ angular.module('MassAutoComplete', [])
         // Clear references and events.
         $scope.show_autocomplete = false;
         angular.element($window).unbind(EVENTS.RESIZE);
-        value_watch();
+        value_watch && value_watch();
         $scope.selected_index = $scope.results = undefined;
         current_model = current_element = previous_value = undefined;
       };
