@@ -136,6 +136,8 @@ angular.module('MassAutoComplete', [])
               if (suggestions && suggestions.length > 0) {
                 $scope.results = [{ value: term, label: ''}].concat(suggestions);
                 $scope.show_autocomplete = true;
+                if (current_options.auto_select_first)
+                    set_selection(1);
               } else {
                 $scope.results = [];
               }
