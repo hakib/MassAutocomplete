@@ -18,6 +18,7 @@ angular.module('MassAutoComplete', [])
       '</div>',
     link: function (scope, element) {
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
+      scope.element = element;
     },
     controller: ["$scope", function ($scope) {
       var that = this;
@@ -71,12 +72,11 @@ angular.module('MassAutoComplete', [])
 
       function _position_autocomplete() {
         var rect = current_element[0].getBoundingClientRect(),
-            scrollTop = $document[0].body.scrollTop || $document[0].documentElement.scrollTop || $window.pageYOffset,
-            scrollLeft = $document[0].body.scrollLeft || $document[0].documentElement.scrollLeft || $window.pageXOffset,
+            elementOffset = $scope.element.offsetParent().offset(),
             container = $scope.container[0];
 
-        container.style.top = rect.top + rect.height + scrollTop + 'px';
-        container.style.left = rect.left + scrollLeft + 'px';
+        container.style.top = rect.top + rect.height - elementOffset.top + 'px';
+        container.style.left = rect.left - elementOffset.left + 'px';
         container.style.width = rect.width + 'px';
       }
       var position_autocomplete = debounce(_position_autocomplete, user_options.debounce_position);
