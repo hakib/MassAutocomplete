@@ -2,6 +2,14 @@ MassAutocomplete
 ================
 
 ### v0.2.1
+- Added option auto_select_first to select the first suggestion automatically (issue #10).
+- AC item directive is now using an isolated scope (issues #14 and #15).
+- Fixed close suggestion box on blur (issue #11).
+- Fixed value watch on destroy (issue #6).
+- Generate dist with gulp.
+- Fixed https references in gh-pages (Thank @dustinchilson for noticing).
+
+### v0.2.1
 - Don't clear value on detach (issue #6).
 - Fixed bug causing values to be cleared on detach.
 - Moved to semantic versioning.
