@@ -315,14 +315,15 @@ angular.module('MassAutoComplete', [])
   return {
     restrict: "A",
     require: ["^massAutocomplete", "ngModel"],
-    scope: false,
+    scope: {'massAutocompleteItem' : "&"},
     link: function (scope, element, attrs, required) {
       // Prevent html5/browser auto completion.
       attrs.$set('autocomplete', 'off');
 
       element.bind('focus', function () {
-        var options = scope[attrs.massAutocompleteItem];
-        if (!options) throw "Invalid options";
+        var options = scope.massAutocompleteItem();
+        if (!options)
+          throw "Invalid options";
         required[0].attach(required[1], element, options);
       });
     }
