@@ -1,6 +1,6 @@
 {
   "name": "angular-mass-autocomplete",
-  "version": "0.2",
+  "version": "0.2.1",
   "description": "Autocomplete for Angular.js applications with a lot to complete",
   "main": "massautocomplete.js",
   "repository": {
@@ -10,7 +10,7 @@
   "keywords": [
     "angularjs",
     "autocomplete",
-		"dropdown"
+    "dropdown"
   ],
   "author": "Haki Benita",
   "homepage": "http://hakib.github.io/MassAutocomplete",
@@ -18,4 +18,9 @@
   "bugs": {
     "url": "https://github.com/hakib/MassAutocomplete/issues"
   },
+  "devDependencies": {
+    "gulp": "~3.8.10",
+    "gulp-uglify": "~1.0.2",
+    "gulp-rename": "~1.2.0"
+  }
 }
