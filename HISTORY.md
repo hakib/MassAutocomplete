@@ -1,7 +1,7 @@
 MassAutocomplete
 ================
 
-### v0.2.1
+### v0.2.2
 - Added option auto_select_first to select the first suggestion automatically (issue #10).
 - AC item directive is now using an isolated scope (issues #14 and #15).
 - Fixed close suggestion box on blur (issue #11).
