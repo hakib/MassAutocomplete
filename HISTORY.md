@@ -1,6 +1,11 @@
 MassAutocomplete
 ================
 
+### v0.2.3
+- Fixed suggestion box opened when no item or other item is selected (Issue #20 - Thanks @pfiaux for opening the issue).
+- Prevent suggestion box from flushing when loading new results (Issue #21 - Thanks @dkulchenko for opening the issue).
+- Prevent form submittion on enter (Issue #23 - Thanks @alxdnlnko  for the PR).
+
 ### v0.2.2
 - Added option auto_select_first to select the first suggestion automatically (issue #10).
 - AC item directive is now using an isolated scope (issues #14 and #15).
