@@ -114,22 +114,28 @@ angular.module('MassAutoComplete', [])
               return;
 
             _position_autocomplete();
-            suggest(nv);
+            suggest(nv, current_element);
           }
         );
-      };
+      }
       that.attach = debounce(_attach, user_options.debounce_attach);
 
-      function _suggest(term) {
+      function _suggest(term, target_element) {
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
         if (typeof(term) === 'string' && term.length > 0) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
+              // Make sure the suggestion we are processing is of the current element.
+              // When using remote sources for example, a suggestion cycnle might be
+              // triggered at a later time (When a different field is in focus).
+              if (!current_element || current_element !== target_element)
+                return;
+
+              if (suggestions && suggestions.length > 0) {
               // Add the original term as the first value to enable the user
               // to return to his original expression after suggestions were made.
-              if (suggestions && suggestions.length > 0) {
                 $scope.results = [{ value: term, label: ''}].concat(suggestions);
                 $scope.show_autocomplete = true;
                 if (current_options.auto_select_first)
@@ -139,6 +145,7 @@ angular.module('MassAutoComplete', [])
               }
             },
             function suggest_failed(error) {
+              $scope.show_autocomplete = false;
               current_options.on_error && current_options.on_error(error);
             }
           ).finally(function suggest_finally() {
@@ -146,9 +153,10 @@ angular.module('MassAutoComplete', [])
           });
         } else {
           $scope.waiting_for_suggestion = false;
+          $scope.show_autocomplete = false;
           $scope.$apply();
         }
-      };
+      }
       var suggest = debounce(_suggest, user_options.debounce_suggest);
 
       // Trigger end of editing and remove all attachments made by
