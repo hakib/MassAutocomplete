@@ -113,9 +113,6 @@ angular.module('MassAutoComplete', [])
             if (nv === last_selected_value)
               return;
 
-            if ($scope.results)
-              $scope.results.length = 0;
-
             _position_autocomplete();
             suggest(nv);
           }
@@ -125,7 +122,6 @@ angular.module('MassAutoComplete', [])
 
       function _suggest(term) {
         $scope.selected_index = 0;
-        $scope.show_autocomplete = false;
         $scope.waiting_for_suggestion = true;
 
         if (typeof(term) === 'string' && term.length > 0) {
