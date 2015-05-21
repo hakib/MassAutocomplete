@@ -166,8 +166,8 @@ angular.module('MassAutoComplete', [])
           var value = current_element.val();
           update_model_value(value);
           current_options.on_detach && current_options.on_detach(value);
-          current_element.unbind(EVENTS.KEYDOWN);
-          current_element.unbind(EVENTS.BLUR);
+          current_element.unbind(EVENTS.KEYDOWN, mac_keydown_handler);
+          current_element.unbind(EVENTS.BLUR, mac_blur_handler);
         }
 
         // Clear references and events.
@@ -216,95 +216,99 @@ angular.module('MassAutoComplete', [])
         current_options.on_select && current_options.on_select(selected);
       };
 
+      var mac_blur_handler = function () {
+        // Detach the element from the auto complete when input loses focus.
+        // Focus is lost when a selection is made from the auto complete menu
+        // using the mouse (or touch). In that case we don't want to detach so
+        // we wait several ms for the input to regain focus.
+        $timeout(function() {
+          if (!current_element || current_element[0] !== $document[0].activeElement)
+            that.detach();
+        }, user_options.debounce_blur);
+      };
+
+      var mac_keydown_handler = function (e) {
+        // Reserve key combinations with shift for different purposes.
+        if (e.shiftKey) return;
+
+        switch (e.keyCode) {
+          // Close the menu if it's open. Or, undo changes made to the value
+          // if the menu is closed.
+          case KEYS.ESC:
+            if ($scope.show_autocomplete) {
+              $scope.show_autocomplete = false;
+              $scope.$apply();
+            } else {
+              current_element.val(previous_value);
+            }
+            break;
+
+          // Select an element and close the menu. Or, if a selection is
+          // unavailable let the event propagate.
+          case KEYS.ENTER:
+            // Accept a selection only if results exist, the menu is
+            // displayed and the results are valid (no current request
+            // for new suggestions is active).
+            if ($scope.show_autocomplete &&
+                $scope.selected_index > 0 &&
+                !$scope.waiting_for_suggestion) {
+              $scope.apply_selection($scope.selected_index);
+              // When selecting an item from the AC list the focus is set on
+              // the input element. So the enter will cause a keypress event
+              // on the input itself. Since this enter is not intended for the
+              // input but for the AC result we prevent propagation to parent
+              // elements because this event is not of their concern. We cannot
+              // prevent events from firing when the event was registered on
+              // the input itself.
+              e.stopPropagation();
+              e.preventDefault();
+            }
+
+            $scope.show_autocomplete = false;
+            $scope.$apply();
+            break;
+
+          // Navigate the menu when it's open. When it's not open fall back
+          // to default behavior.
+          case KEYS.TAB:
+            if (!$scope.show_autocomplete)
+              break;
+
+            e.preventDefault();
+            /* falls through */
+
+          // Open the menu when results exists but are not displayed. Or,
+          // select the next element when the menu is open. When reaching
+          // bottom wrap to top.
+          case KEYS.DOWN:
+            if ($scope.results.length > 0) {
+              if ($scope.show_autocomplete) {
+                set_selection($scope.selected_index + 1 > $scope.results.length - 1 ? 0 : $scope.selected_index + 1);
+              } else {
+                $scope.show_autocomplete = true;
+                $scope.selected_index = 0;
+              }
+              $scope.$apply();
+            }
+            break;
+
+          // Navigate up in the menu. When reaching the top wrap to bottom.
+          case KEYS.UP:
+            if ($scope.show_autocomplete) {
+              e.preventDefault();
+              set_selection($scope.selected_index - 1 >= 0 ? $scope.selected_index - 1 : $scope.results.length - 1);
+              $scope.$apply();
+            }
+            break;
+        }
+      };
+
       function bind_element() {
         angular.element($window).bind(EVENTS.RESIZE, position_autocomplete);
 
-        current_element.bind(EVENTS.BLUR, function () {
-          // Detach the element from the auto complete when input loses focus.
-          // Focus is lost when a selection is made from the auto complete menu
-          // using the mouse (or touch). In that case we don't want to detach so
-          // we wait several ms for the input to regain focus.
-          $timeout(function() {
-            if (!current_element || current_element[0] !== $document[0].activeElement)
-              that.detach();
-          }, user_options.debounce_blur);
-        });
+        current_element.bind(EVENTS.BLUR, mac_blur_handler);
 
-        current_element.bind(EVENTS.KEYDOWN, function (e) {
-          // Reserve key combinations with shift for different purposes.
-          if (e.shiftKey) return;
-
-          switch (e.keyCode) {
-            // Close the menu if it's open. Or, undo changes made to the value
-            // if the menu is closed.
-            case KEYS.ESC:
-              if ($scope.show_autocomplete) {
-                $scope.show_autocomplete = false;
-                $scope.$apply();
-              } else {
-                current_element.val(previous_value);
-              }
-              break;
-
-            // Select an element and close the menu. Or, if a selection is
-            // unavailable let the event propagate.
-            case KEYS.ENTER:
-              // Accept a selection only if results exist, the menu is
-              // displayed and the results are valid (no current request
-              // for new suggestions is active).
-              if ($scope.show_autocomplete &&
-                  $scope.selected_index > 0 &&
-                  !$scope.waiting_for_suggestion) {
-                $scope.apply_selection($scope.selected_index);
-                // When selecting an item from the AC list the focus is set on
-                // the input element. So the enter will cause a keypress event
-                // on the input itself. Since this enter is not intended for the
-                // input but for the AC result we prevent propagation to parent
-                // elements because this event is not of their concern. We cannot
-                // prevent events from firing when the event was registered on
-                // the input itself.
-                e.stopPropagation();
-                e.preventDefault();
-              }
-
-              $scope.show_autocomplete = false;
-              $scope.$apply();
-              break;
-
-            // Navigate the menu when it's open. When it's not open fall back
-            // to default behavior.
-            case KEYS.TAB:
-              if (!$scope.show_autocomplete)
-                break;
-
-              e.preventDefault();
-              /* falls through */
-
-            // Open the menu when results exists but are not displayed. Or,
-            // select the next element when the menu is open. When reaching
-            // bottom wrap to top.
-            case KEYS.DOWN:
-              if ($scope.results.length > 0) {
-                if ($scope.show_autocomplete) {
-                  set_selection($scope.selected_index + 1 > $scope.results.length - 1 ? 0 : $scope.selected_index + 1);
-                } else {
-                  $scope.show_autocomplete = true;
-                  $scope.selected_index = 0;
-                }
-                $scope.$apply();
-              }
-              break;
-
-            // Navigate up in the menu. When reaching the top wrap to bottom.
-            case KEYS.UP:
-              if ($scope.show_autocomplete) {
-                e.preventDefault();
-                set_selection($scope.selected_index - 1 >= 0 ? $scope.selected_index - 1 : $scope.results.length - 1);
-                $scope.$apply();
-              }
-              break;
-          }
-        });
+        current_element.bind(EVENTS.KEYDOWN, mac_keydown_handler);
       }
 
       $scope.$on('$destroy', function () {
