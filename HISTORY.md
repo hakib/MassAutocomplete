@@ -1,6 +1,10 @@
 MassAutocomplete
 ================
 
+### v0.2.4
+- During detach unbind only handlers bound by the directive it self (Thanks @Scoup and @maninga for the pull requests).
+- Added test configuration and several scenarios to the dev branch. 
+
 ### v0.2.3
 - Fixed suggestion box opened when no item or other item is selected (Issue #20 - Thanks @pfiaux for opening the issue).
 - Prevent suggestion box from flushing when loading new results (Issue #21 - Thanks @dkulchenko for opening the issue).
