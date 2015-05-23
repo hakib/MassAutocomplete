@@ -36,6 +36,10 @@ angular.module('MassAutoComplete', [])
         BLUR: 'blur'
       };
 
+      var bound_events = {};
+      bound_events[EVENTS.BLUR] = null;
+      bound_events[EVENTS.KEYDOWN] = null;
+
       var _user_options = $scope.options() || {};
       var user_options = {
         debounce_position: _user_options.debounce_position || 150,
@@ -166,8 +170,8 @@ angular.module('MassAutoComplete', [])
           var value = current_element.val();
           update_model_value(value);
           current_options.on_detach && current_options.on_detach(value);
-          current_element.unbind(EVENTS.KEYDOWN);
-          current_element.unbind(EVENTS.BLUR);
+          current_element.unbind(EVENTS.KEYDOWN, bound_events[EVENTS.KEYDOWN]);
+          current_element.unbind(EVENTS.BLUR, bound_events[EVENTS.BLUR]);  
         }
 
         // Clear references and events.
@@ -219,7 +223,7 @@ angular.module('MassAutoComplete', [])
       function bind_element() {
         angular.element($window).bind(EVENTS.RESIZE, position_autocomplete);
 
-        current_element.bind(EVENTS.BLUR, function () {
+        bound_events[EVENTS.BLUR] = function () {
           // Detach the element from the auto complete when input loses focus.
           // Focus is lost when a selection is made from the auto complete menu
           // using the mouse (or touch). In that case we don't want to detach so
@@ -228,9 +232,10 @@ angular.module('MassAutoComplete', [])
             if (!current_element || current_element[0] !== $document[0].activeElement)
               that.detach();
           }, user_options.debounce_blur);
-        });
+        };
+        current_element.bind(EVENTS.BLUR, bound_events[EVENTS.BLUR]);
 
-        current_element.bind(EVENTS.KEYDOWN, function (e) {
+        bound_events[EVENTS.KEYDOWN] = function (e) {
           // Reserve key combinations with shift for different purposes.
           if (e.shiftKey) return;
 
@@ -304,7 +309,8 @@ angular.module('MassAutoComplete', [])
               }
               break;
           }
-        });
+        };
+        current_element.bind(EVENTS.KEYDOWN, bound_events[EVENTS.KEYDOWN]);
       }
 
       $scope.$on('$destroy', function () {
