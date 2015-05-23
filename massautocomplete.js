@@ -39,6 +39,7 @@ angular.module('MassAutoComplete', [])
       var bound_events = {};
       bound_events[EVENTS.BLUR] = null;
       bound_events[EVENTS.KEYDOWN] = null;
+      bound_events[EVENTS.RESIZE] = null;
 
       var _user_options = $scope.options() || {};
       var user_options = {
@@ -171,12 +172,12 @@ angular.module('MassAutoComplete', [])
           update_model_value(value);
           current_options.on_detach && current_options.on_detach(value);
           current_element.unbind(EVENTS.KEYDOWN, bound_events[EVENTS.KEYDOWN]);
-          current_element.unbind(EVENTS.BLUR, bound_events[EVENTS.BLUR]);  
+          current_element.unbind(EVENTS.BLUR, bound_events[EVENTS.BLUR]);
         }
 
         // Clear references and events.
         $scope.show_autocomplete = false;
-        angular.element($window).unbind(EVENTS.RESIZE);
+        angular.element($window).unbind(EVENTS.RESIZE, bound_events[EVENTS.RESIZE]);
         value_watch && value_watch();
         $scope.selected_index = $scope.results = undefined;
         current_model = current_element = previous_value = undefined;
