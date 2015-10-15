@@ -7,7 +7,7 @@ angular.module('MassAutoComplete', [])
     scope: { options: '&massAutocomplete' },
     transclude: true,
     template:
-      '<span ng-transclude></span>' +
+      '<span ng-class="show_autocomplete && results.length > 0 ? \'ac-container-is-open\' : \'ac-container-is-closed\'" ng-transclude></span>' +
       '<div class="ac-container" ng-show="show_autocomplete && results.length > 0" style="position:absolute;">' +
         '<ul class="ac-menu">' +
           '<li ng-repeat="result in results" ng-if="$index > 0" ' +
