@@ -46,7 +46,8 @@ angular.module('MassAutoComplete', [])
         debounce_position: _user_options.debounce_position || 150,
         debounce_attach: _user_options.debounce_attach || 300,
         debounce_suggest: _user_options.debounce_suggest || 200,
-        debounce_blur: _user_options.debounce_blur || 150
+        debounce_blur: _user_options.debounce_blur || 150,
+        undo_esc: typeof _user_options.undo_esc === 'undefined'
       };
 
       var current_element,
@@ -248,7 +249,7 @@ angular.module('MassAutoComplete', [])
                 $scope.show_autocomplete = false;
                 $scope.$apply();
               } else {
-                current_element.val(previous_value);
+                if (user_options.undo_esc) current_element.val(previous_value);
               }
               break;
 
