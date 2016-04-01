@@ -54,7 +54,11 @@ angular.module('MassAutoComplete', [])
           current_options,
           previous_value,
           value_watch,
-          last_selected_value;
+          last_selected_value,
+          refresh_on_unchanged_value;
+
+      // by default, don't do a refresh our search if the search string has not changed
+      refresh_on_unchanged_value = _user_options.refresh_on_unchanged_value || false;
 
       $scope.show_autocomplete = false;
 
@@ -115,8 +119,9 @@ angular.module('MassAutoComplete', [])
             // When selecting from the menu the ng-model is updated and this watch
             // is triggered. This causes another suggestion cycle that will provide as
             // suggestion the value that is currently selected - this is unnecessary.
-            if (nv === last_selected_value)
+            if (!refresh_on_unchanged_value && nv === last_selected_value) {
               return;
+            }
 
             _position_autocomplete();
             suggest(nv, current_element);
@@ -126,8 +131,15 @@ angular.module('MassAutoComplete', [])
       that.attach = debounce(_attach, user_options.debounce_attach);
 
       function _suggest(term, target_element) {
-        $scope.selected_index = 0;
+
+        // use the selected_index to detect if the user just clicked a selection.  If so, return and don't search.
+        if ($scope.selected_index > 0) {
+          $scope.selected_index = 0;
+          return;
+        }
+
         $scope.waiting_for_suggestion = true;
+        $scope.selected_index = 0;
 
         if (typeof(term) === 'string' && term.length > 0) {
           $q.when(current_options.suggest(term),
