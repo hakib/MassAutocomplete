@@ -8,7 +8,7 @@ angular.module('MassAutoComplete', [])
     transclude: true,
     template:
       '<span ng-transclude></span>' +
-      '<div class="ac-container" ng-show="show_autocomplete && results.length > 0" style="position:absolute;">' +
+      '<div class="ac-container" ng-show="show_autocomplete && results.length > 0" style="position:fixed;">' +
         '<ul class="ac-menu">' +
           '<li ng-repeat="result in results" ng-if="$index > 0" ' +
             'class="ac-menu-item" ng-class="$index == selected_index ? \'ac-state-focus\': \'\'">' +
