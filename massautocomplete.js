@@ -12,20 +12,20 @@ angular.module('MassAutoComplete', [])
     ESC: 27,
     ENTER: 13,
     UP: 38,
-    DOWN: 40,
+    DOWN: 40
   };
 
   config.EVENTS = {
     KEYDOWN: 'keydown',
     RESIZE: 'resize',
-    BLUR: 'blur',
+    BLUR: 'blur'
   };
 
   config.DEBOUNCE = {
     position: 150,
     attach: 300,
     suggest: 200,
-    blur: 150,
+    blur: 150
   };
 
   config.generate_random_id = function(prefix) {
@@ -60,7 +60,7 @@ angular.module('MassAutoComplete', [])
   return {
     restrict: 'A',
     scope: {
-      options: '&massAutocomplete',
+      options: '&massAutocomplete'
     },
     transclude: true,
     template:
@@ -434,10 +434,10 @@ angular.module('MassAutoComplete', [])
     restrict: 'A',
     require: [
       '^massAutocomplete',
-      'ngModel',
+      'ngModel'
     ],
     scope: {
-      'massAutocompleteItem' : '&',
+      'massAutocompleteItem' : '&'
     },
     link: function (scope, element, attrs, required) {
       // Prevent html5/browser auto completion.
