@@ -390,11 +390,11 @@ angular.module('MassAutoComplete', [])
                 break;
 
               e.preventDefault();
-              /* falls through */
 
             // Open the menu when results exists but are not displayed. Or,
             // select the next element when the menu is open. When reaching
             // bottom wrap to top.
+            /* falls through */
             case config.KEYS.DOWN:
               if ($scope.results.length > 0) {
                 if ($scope.show_autocomplete) {
