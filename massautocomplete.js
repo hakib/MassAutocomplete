@@ -1,10 +1,15 @@
+/* global angular */
+'use strict';
+
 angular.module('MassAutoComplete', [])
 .directive('massAutocomplete', ["$timeout", "$window", "$document", "$q", function ($timeout, $window, $document, $q) {
   'use strict';
 
   return {
     restrict: "A",
-    scope: { options: '&massAutocomplete' },
+    scope: {
+      options: '&massAutocomplete',
+    },
     transclude: true,
     template:
       '<span ng-transclude></span>' +
@@ -16,9 +21,11 @@ angular.module('MassAutoComplete', [])
           '</li>' +
         '</ul>' +
       '</div>',
+
     link: function (scope, element) {
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
     },
+
     controller: ["$scope", function ($scope) {
       var that = this;
 
@@ -86,16 +93,26 @@ angular.module('MassAutoComplete', [])
       }
       var position_autocomplete = debounce(_position_autocomplete, user_options.debounce_position);
 
-      // Attach autocomplete behaviour to an input element.
+      // Attach autocomplete behavior to an input element.
       function _attach(ngmodel, target_element, options) {
         // Element is already attached.
-        if (current_element === target_element) return;
-        // Safe: clear previously attached elements.
-        if (current_element) that.detach();
-        // The element is still the active element.
-        if (target_element[0] !== $document[0].activeElement) return;
+        if (current_element === target_element) {
+          return;
+        }
 
-        options.on_attach && options.on_attach();
+        // Safe: clear previously attached elements.
+        if (current_element) {
+          that.detach();
+        }
+
+        // The element is still the active element.
+        if (target_element[0] !== $document[0].activeElement) {
+          return;
+        }
+
+        if (options.on_attach) {
+          options.on_attach();
+        }
 
         current_element = target_element;
         current_model = ngmodel;
@@ -110,7 +127,7 @@ angular.module('MassAutoComplete', [])
           function () {
             return ngmodel.$modelValue;
           },
-          function (nv, ov) {
+          function (nv) {
             // Prevent suggestion cycle when the value is the last value selected.
             // When selecting from the menu the ng-model is updated and this watch
             // is triggered. This causes another suggestion cycle that will provide as
@@ -133,7 +150,7 @@ angular.module('MassAutoComplete', [])
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
               // Make sure the suggestion we are processing is of the current element.
-              // When using remote sources for example, a suggestion cycnle might be
+              // When using remote sources for example, a suggestion cycle might be
               // triggered at a later time (When a different field is in focus).
               if (!current_element || current_element !== target_element)
                 return;
@@ -218,7 +235,9 @@ angular.module('MassAutoComplete', [])
         update_model_value(selected.value);
         $scope.show_autocomplete = false;
 
-        current_options.on_select && current_options.on_select(selected);
+        if (current_options.on_select) {
+          current_options.on_select(selected);
+        }
       };
 
       function bind_element() {
@@ -323,21 +342,29 @@ angular.module('MassAutoComplete', [])
 }])
 
 .directive('massAutocompleteItem', function () {
-  'use strict';
 
   return {
     restrict: "A",
-    require: ["^massAutocomplete", "ngModel"],
-    scope: {'massAutocompleteItem' : "&"},
+    require: [
+      "^massAutocomplete",
+      "ngModel",
+    ],
+    scope: {
+      'massAutocompleteItem' : "&",
+    },
     link: function (scope, element, attrs, required) {
       // Prevent html5/browser auto completion.
       attrs.$set('autocomplete', 'off');
 
+      var acContainer = required[0];
+      var ngModel = required[1];
+
       element.bind('focus', function () {
         var options = scope.massAutocompleteItem();
-        if (!options)
+        if (!options) {
           throw "Invalid options";
-        required[0].attach(required[1], element, options);
+        }
+        acContainer.attach(ngModel, element, options);
       });
     }
   };
