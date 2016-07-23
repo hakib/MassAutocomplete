@@ -58,7 +58,7 @@ angular.module('MassAutoComplete', [])
   function (config, $timeout, $window, $document, $q) {
 
   return {
-    restrict: "A",
+    restrict: 'A',
     scope: {
       options: '&massAutocomplete',
     },
@@ -88,7 +88,7 @@ angular.module('MassAutoComplete', [])
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
     },
 
-    controller: ["$scope", function ($scope) {
+    controller: ['$scope', function ($scope) {
       var that = this;
 
       var bound_events = {};
@@ -431,13 +431,13 @@ angular.module('MassAutoComplete', [])
 .directive('massAutocompleteItem', function () {
 
   return {
-    restrict: "A",
+    restrict: 'A',
     require: [
-      "^massAutocomplete",
-      "ngModel",
+      '^massAutocomplete',
+      'ngModel',
     ],
     scope: {
-      'massAutocompleteItem' : "&",
+      'massAutocompleteItem' : '&',
     },
     link: function (scope, element, attrs, required) {
       // Prevent html5/browser auto completion.
@@ -449,7 +449,7 @@ angular.module('MassAutoComplete', [])
       element.bind('focus', function () {
         var options = scope.massAutocompleteItem();
         if (!options) {
-          throw "Invalid options";
+          throw 'Invalid options';
         }
         acContainer.attach(ngModel, element, options);
       });
