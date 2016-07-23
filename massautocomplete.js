@@ -2,8 +2,60 @@
 'use strict';
 
 angular.module('MassAutoComplete', [])
-.directive('massAutocomplete', ["$timeout", "$window", "$document", "$q", function ($timeout, $window, $document, $q) {
-  'use strict';
+
+.provider('MassAutoCompleteConfigurrer', function() {
+
+  var config = this;
+
+  config.KEYS = {
+    TAB: 9,
+    ESC: 27,
+    ENTER: 13,
+    UP: 38,
+    DOWN: 40,
+  };
+
+  config.EVENTS = {
+    KEYDOWN: 'keydown',
+    RESIZE: 'resize',
+    BLUR: 'blur',
+  };
+
+  config.DEBOUNCE = {
+    position: 150,
+    attach: 300,
+    suggest: 200,
+    blur: 150,
+  };
+
+  config.generate_random_id = function(prefix) {
+    return prefix + '_' + Math.random().toString().substring(2);
+  };
+
+  // Position ac container given a target element
+  config.position_autocomplete = function(container, target) {
+    var rect = target[0].getBoundingClientRect(),
+        scrollTop = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset,
+        scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft || window.pageXOffset;
+
+    container[0].style.top = rect.top + rect.height + scrollTop + 'px';
+    container[0].style.left = rect.left + scrollLeft + 'px';
+    container[0].style.width = rect.width + 'px';
+  };
+
+  this.$get = function() {
+    return config;
+  };
+
+})
+
+.directive('massAutocomplete', [
+  'MassAutoCompleteConfigurrer',
+  '$timeout',
+  '$window',
+  '$document',
+  '$q',
+  function (config, $timeout, $window, $document, $q) {
 
   return {
     restrict: "A",
@@ -29,31 +81,17 @@ angular.module('MassAutoComplete', [])
     controller: ["$scope", function ($scope) {
       var that = this;
 
-      var KEYS = {
-        TAB: 9,
-        ESC: 27,
-        ENTER: 13,
-        UP: 38,
-        DOWN: 40
-      };
-
-      var EVENTS = {
-        KEYDOWN: 'keydown',
-        RESIZE: 'resize',
-        BLUR: 'blur'
-      };
-
       var bound_events = {};
-      bound_events[EVENTS.BLUR] = null;
-      bound_events[EVENTS.KEYDOWN] = null;
-      bound_events[EVENTS.RESIZE] = null;
+      bound_events[config.EVENTS.BLUR] = null;
+      bound_events[config.EVENTS.KEYDOWN] = null;
+      bound_events[config.EVENTS.RESIZE] = null;
 
       var _user_options = $scope.options() || {};
       var user_options = {
-        debounce_position: _user_options.debounce_position || 150,
-        debounce_attach: _user_options.debounce_attach || 300,
-        debounce_suggest: _user_options.debounce_suggest || 200,
-        debounce_blur: _user_options.debounce_blur || 150
+        debounce_position: _user_options.debounce_position || config.DEBOUNCE.position,
+        debounce_attach: _user_options.debounce_attach || config.DEBOUNCE.attach,
+        debounce_suggest: _user_options.debounce_suggest || config.DEBOUNCE.suggest,
+        debounce_blur: _user_options.debounce_blur || config.DEBOUNCE.blur
       };
 
       var current_element,
@@ -241,9 +279,9 @@ angular.module('MassAutoComplete', [])
       };
 
       function bind_element() {
-        angular.element($window).bind(EVENTS.RESIZE, position_autocomplete);
+        angular.element($window).bind(config.EVENTS.RESIZE, position_autocomplete);
 
-        bound_events[EVENTS.BLUR] = function () {
+        bound_events[config.EVENTS.BLUR] = function () {
           // Detach the element from the auto complete when input loses focus.
           // Focus is lost when a selection is made from the auto complete menu
           // using the mouse (or touch). In that case we don't want to detach so
@@ -253,16 +291,16 @@ angular.module('MassAutoComplete', [])
               that.detach();
           }, user_options.debounce_blur);
         };
-        current_element.bind(EVENTS.BLUR, bound_events[EVENTS.BLUR]);
+        current_element.bind(config.EVENTS.BLUR, bound_events[config.EVENTS.BLUR]);
 
-        bound_events[EVENTS.KEYDOWN] = function (e) {
+        bound_events[config.EVENTS.KEYDOWN] = function (e) {
           // Reserve key combinations with shift for different purposes.
           if (e.shiftKey) return;
 
           switch (e.keyCode) {
             // Close the menu if it's open. Or, undo changes made to the value
             // if the menu is closed.
-            case KEYS.ESC:
+            case config.KEYS.ESC:
               if ($scope.show_autocomplete) {
                 $scope.show_autocomplete = false;
                 $scope.$apply();
@@ -273,7 +311,7 @@ angular.module('MassAutoComplete', [])
 
             // Select an element and close the menu. Or, if a selection is
             // unavailable let the event propagate.
-            case KEYS.ENTER:
+            case config.KEYS.ENTER:
               // Accept a selection only if results exist, the menu is
               // displayed and the results are valid (no current request
               // for new suggestions is active).
@@ -292,13 +330,13 @@ angular.module('MassAutoComplete', [])
                 e.preventDefault();
               }
 
-              $scope.show_autocomplete = false;
+              hide_autocomplete();
               $scope.$apply();
               break;
 
             // Navigate the menu when it's open. When it's not open fall back
             // to default behavior.
-            case KEYS.TAB:
+            case config.KEYS.TAB:
               if (!$scope.show_autocomplete)
                 break;
 
@@ -308,20 +346,20 @@ angular.module('MassAutoComplete', [])
             // Open the menu when results exists but are not displayed. Or,
             // select the next element when the menu is open. When reaching
             // bottom wrap to top.
-            case KEYS.DOWN:
+            case config.KEYS.DOWN:
               if ($scope.results.length > 0) {
                 if ($scope.show_autocomplete) {
                   set_selection($scope.selected_index + 1 > $scope.results.length - 1 ? 0 : $scope.selected_index + 1);
                 } else {
-                  $scope.show_autocomplete = true;
-                  $scope.selected_index = 0;
+                  show_autocomplete();
+                  set_selection(0);
                 }
                 $scope.$apply();
               }
               break;
 
             // Navigate up in the menu. When reaching the top wrap to bottom.
-            case KEYS.UP:
+            case config.KEYS.UP:
               if ($scope.show_autocomplete) {
                 e.preventDefault();
                 set_selection($scope.selected_index - 1 >= 0 ? $scope.selected_index - 1 : $scope.results.length - 1);
@@ -330,7 +368,7 @@ angular.module('MassAutoComplete', [])
               break;
           }
         };
-        current_element.bind(EVENTS.KEYDOWN, bound_events[EVENTS.KEYDOWN]);
+        current_element.bind(config.EVENTS.KEYDOWN, bound_events[config.EVENTS.KEYDOWN]);
       }
 
       $scope.$on('$destroy', function () {
