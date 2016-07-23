@@ -449,7 +449,7 @@ angular.module('MassAutoComplete', [])
       element.bind('focus', function () {
         var options = scope.massAutocompleteItem();
         if (!options) {
-          throw 'Invalid options';
+          throw new Error('Invalid options');
         }
         acContainer.attach(ngModel, element, options);
       });
