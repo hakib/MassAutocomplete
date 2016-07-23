@@ -154,6 +154,56 @@ angular.module('MassAutoComplete', [])
       }
       var position_autocomplete = debounce(_position_autocomplete, user_options.debounce_position);
 
+      function _suggest(term, target_element) {
+        $scope.selected_index = 0;
+        $scope.waiting_for_suggestion = true;
+
+        if (typeof(term) === 'string' && term.length > 0) {
+          $q.when(current_options.suggest(term),
+            function suggest_succeeded(suggestions) {
+              // Make sure the suggestion we are processing is of the current element.
+              // When using remote sources for example, a suggestion cycle might be
+              // triggered at a later time (When a different field is in focus).
+              if (!current_element || current_element !== target_element)
+                return;
+
+              if (suggestions && suggestions.length > 0) {
+                // Set unique id to each suggestion so we can
+                // reference them (aria)
+                suggestions.forEach(function(s) {
+                  if (!s.id) {
+                    s.id = config.generate_random_id('ac_item');
+                  }
+                });
+                // Add the original term as the first value to enable the user
+                // to return to his original expression after suggestions were made.
+                $scope.results = [{ value: term, label: '', id: ''}].concat(suggestions);
+                show_autocomplete();
+                if (current_options.auto_select_first) {
+                  set_selection(1);
+                }
+              } else {
+                $scope.results = [];
+                hide_autocomplete();
+              }
+            },
+            function suggest_failed(error) {
+              hide_autocomplete();
+              if (current_options.on_error) {
+                current_options.on_error(error);
+              }
+            }
+          ).finally(function suggest_finally() {
+            $scope.waiting_for_suggestion = false;
+          });
+        } else {
+          $scope.waiting_for_suggestion = false;
+          hide_autocomplete();
+          $scope.$apply();
+        }
+      }
+      var suggest = debounce(_suggest, user_options.debounce_suggest);
+
       // Attach autocomplete behavior to an input element.
       function _attach(ngmodel, target_element, options) {
         // Element is already attached.
@@ -204,56 +254,6 @@ angular.module('MassAutoComplete', [])
         );
       }
       that.attach = debounce(_attach, user_options.debounce_attach);
-
-      function _suggest(term, target_element) {
-        $scope.selected_index = 0;
-        $scope.waiting_for_suggestion = true;
-
-        if (typeof(term) === 'string' && term.length > 0) {
-          $q.when(current_options.suggest(term),
-            function suggest_succeeded(suggestions) {
-              // Make sure the suggestion we are processing is of the current element.
-              // When using remote sources for example, a suggestion cycle might be
-              // triggered at a later time (When a different field is in focus).
-              if (!current_element || current_element !== target_element)
-                return;
-
-              if (suggestions && suggestions.length > 0) {
-                // Set unique id to each suggestion so we can
-                // reference them (aria)
-                suggestions.forEach(function(s) {
-                  if (!s.id) {
-                    s.id = config.generate_random_id('ac_item');
-                  }
-                });
-                // Add the original term as the first value to enable the user
-                // to return to his original expression after suggestions were made.
-                $scope.results = [{ value: term, label: '', id: ''}].concat(suggestions);
-                show_autocomplete();
-                if (current_options.auto_select_first) {
-                  set_selection(1);
-                }
-              } else {
-                $scope.results = [];
-                hide_autocomplete();
-              }
-            },
-            function suggest_failed(error) {
-              hide_autocomplete();
-              if (current_options.on_error) {
-                current_options.on_error(error);
-              }
-            }
-          ).finally(function suggest_finally() {
-            $scope.waiting_for_suggestion = false;
-          });
-        } else {
-          $scope.waiting_for_suggestion = false;
-          hide_autocomplete();
-          $scope.$apply();
-        }
-      }
-      var suggest = debounce(_suggest, user_options.debounce_suggest);
 
       // Trigger end of editing and remove all attachments made by
       // this directive to the input element.
