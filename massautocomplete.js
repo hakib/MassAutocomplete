@@ -5,7 +5,6 @@
 angular.module('MassAutoComplete', [])
 
 .provider('massAutocompleteConfig', function() {
-
   var config = this;
 
   config.KEYS = {
@@ -47,17 +46,9 @@ angular.module('MassAutoComplete', [])
   this.$get = function() {
     return config;
   };
-
 })
 
-.directive('massAutocomplete', [
-  'massAutocompleteConfig',
-  '$timeout',
-  '$window',
-  '$document',
-  '$q',
-  function(config, $timeout, $window, $document, $q) {
-
+.directive('massAutocomplete', ['massAutocompleteConfig', '$timeout', '$window', '$document', '$q', function(config, $timeout, $window, $document, $q) {
   return {
     restrict: 'A',
     scope: {
@@ -124,24 +115,24 @@ angular.module('MassAutoComplete', [])
         clear_selection();
       }
 
-      // Debounce - taken from underscore
+      // Debounce - taken from underscore.
       function debounce(func, wait, immediate) {
-          var timeout;
-          return function() {
-              var context = this, args = arguments;
-              var later = function() {
-                  timeout = null;
-                  if (!immediate) {
-                    func.apply(context, args);
-                  }
-              };
-              var callNow = immediate && !timeout;
-              clearTimeout(timeout);
-              timeout = setTimeout(later, wait);
-              if (callNow) {
-                func.apply(context, args);
-              }
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          var later = function() {
+            timeout = null;
+            if (!immediate) {
+              func.apply(context, args);
+            }
           };
+          var callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+          if (callNow) {
+            func.apply(context, args);
+          }
+        };
       }
 
       // Make sure an element has id.
@@ -441,7 +432,6 @@ angular.module('MassAutoComplete', [])
 }])
 
 .directive('massAutocompleteItem', function() {
-
   return {
     restrict: 'A',
     require: [
