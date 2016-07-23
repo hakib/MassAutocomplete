@@ -18,6 +18,9 @@
   "bugs": {
     "url": "https://github.com/hakib/MassAutocomplete/issues"
   },
+  "peerDependencies": {
+    "angular": "1"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-uglify": "^1.5.4",
