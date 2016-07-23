@@ -55,7 +55,7 @@ angular.module('MassAutoComplete', [])
   '$window',
   '$document',
   '$q',
-  function (config, $timeout, $window, $document, $q) {
+  function(config, $timeout, $window, $document, $q) {
 
   return {
     restrict: 'A',
@@ -84,11 +84,11 @@ angular.module('MassAutoComplete', [])
 
       '</div>',
 
-    link: function (scope, element) {
+    link: function(scope, element) {
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
     },
 
-    controller: ['$scope', function ($scope) {
+    controller: ['$scope', function($scope) {
       var that = this;
 
       var bound_events = {};
@@ -242,10 +242,10 @@ angular.module('MassAutoComplete', [])
         bind_element();
 
         value_watch = $scope.$watch(
-          function () {
+          function() {
             return ngmodel.$modelValue;
           },
-          function (nv) {
+          function(nv) {
             // Prevent suggestion cycle when the value is the last value selected.
             // When selecting from the menu the ng-model is updated and this watch
             // is triggered. This causes another suggestion cycle that will provide as
@@ -263,7 +263,7 @@ angular.module('MassAutoComplete', [])
 
       // Trigger end of editing and remove all attachments made by
       // this directive to the input element.
-      that.detach = function () {
+      that.detach = function() {
         if (current_element) {
           var value = current_element.val();
           update_model_value(value);
@@ -318,7 +318,7 @@ angular.module('MassAutoComplete', [])
       // Apply and accept the current selection made from the menu.
       // When selecting from the menu directly (using click or touch) the
       // selection is directly applied.
-      $scope.apply_selection = function (i) {
+      $scope.apply_selection = function(i) {
         current_element[0].focus();
         if (!$scope.show_autocomplete || i > $scope.results.length || i < 0) {
           return;
@@ -337,7 +337,7 @@ angular.module('MassAutoComplete', [])
       function bind_element() {
         angular.element($window).bind(config.EVENTS.RESIZE, position_autocomplete);
 
-        bound_events[config.EVENTS.BLUR] = function () {
+        bound_events[config.EVENTS.BLUR] = function() {
           // Detach the element from the auto complete when input loses focus.
           // Focus is lost when a selection is made from the auto complete menu
           // using the mouse (or touch). In that case we don't want to detach so
@@ -350,7 +350,7 @@ angular.module('MassAutoComplete', [])
         };
         current_element.bind(config.EVENTS.BLUR, bound_events[config.EVENTS.BLUR]);
 
-        bound_events[config.EVENTS.KEYDOWN] = function (e) {
+        bound_events[config.EVENTS.KEYDOWN] = function(e) {
           // Reserve key combinations with shift for different purposes.
           if (e.shiftKey) {
             return;
@@ -431,7 +431,7 @@ angular.module('MassAutoComplete', [])
         current_element.bind(config.EVENTS.KEYDOWN, bound_events[config.EVENTS.KEYDOWN]);
       }
 
-      $scope.$on('$destroy', function () {
+      $scope.$on('$destroy', function() {
         that.detach();
         $scope.container.remove();
       });
@@ -439,7 +439,7 @@ angular.module('MassAutoComplete', [])
   };
 }])
 
-.directive('massAutocompleteItem', function () {
+.directive('massAutocompleteItem', function() {
 
   return {
     restrict: 'A',
@@ -450,14 +450,14 @@ angular.module('MassAutoComplete', [])
     scope: {
       'massAutocompleteItem' : '&'
     },
-    link: function (scope, element, attrs, required) {
+    link: function(scope, element, attrs, required) {
       // Prevent html5/browser auto completion.
       attrs.$set('autocomplete', 'off');
 
       var acContainer = required[0];
       var ngModel = required[1];
 
-      element.bind('focus', function () {
+      element.bind('focus', function() {
         var options = scope.massAutocompleteItem();
         if (!options) {
           throw new Error('Invalid options');
