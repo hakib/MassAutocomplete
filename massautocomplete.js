@@ -3,7 +3,7 @@
 
 angular.module('MassAutoComplete', [])
 
-.provider('MassAutoCompleteConfigurrer', function() {
+.provider('massAutocompleteConfig', function() {
 
   var config = this;
 
@@ -50,7 +50,7 @@ angular.module('MassAutoComplete', [])
 })
 
 .directive('massAutocomplete', [
-  'MassAutoCompleteConfigurrer',
+  'massAutocompleteConfig',
   '$timeout',
   '$window',
   '$document',
