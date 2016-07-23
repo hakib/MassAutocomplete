@@ -65,13 +65,23 @@ angular.module('MassAutoComplete', [])
     transclude: true,
     template:
       '<span ng-transclude></span>' +
-      '<div class="ac-container" ng-show="show_autocomplete && results.length > 0" style="position:absolute;">' +
-        '<ul class="ac-menu">' +
+
+      '<div class="ac-container" ' +
+           'aria-autocomplete="list" ' +
+           'role="listbox" ' +
+           'ng-show="show_autocomplete" ' +
+           'style="position:absolute;">' +
+
+        '<ul class="ac-menu"> ' +
           '<li ng-repeat="result in results" ng-if="$index > 0" ' +
-            'class="ac-menu-item" ng-class="$index == selected_index ? \'ac-state-focus\': \'\'">' +
+            'class="ac-menu-item" ' +
+            'role="option" ' +
+            'id="{{result.id}}" ' +
+            'ng-class="$index == selected_index ? \'ac-state-focus\': \'\'">' +
             '<a href ng-click="apply_selection($index)" ng-bind-html="result.label"></a>' +
           '</li>' +
         '</ul>' +
+
       '</div>',
 
     link: function (scope, element) {
@@ -99,9 +109,19 @@ angular.module('MassAutoComplete', [])
           current_options,
           previous_value,
           value_watch,
-          last_selected_value;
+          last_selected_value,
+          current_element_random_id_set;
 
       $scope.show_autocomplete = false;
+
+      function show_autocomplete() {
+        $scope.show_autocomplete = true;
+      }
+
+      function hide_autocomplete() {
+        $scope.show_autocomplete = false;
+        clear_selection();
+      }
 
       // Debounce - taken from underscore
       function debounce(func, wait, immediate) {
@@ -119,15 +139,18 @@ angular.module('MassAutoComplete', [])
           };
       }
 
-      function _position_autocomplete() {
-        var rect = current_element[0].getBoundingClientRect(),
-            scrollTop = $document[0].body.scrollTop || $document[0].documentElement.scrollTop || $window.pageYOffset,
-            scrollLeft = $document[0].body.scrollLeft || $document[0].documentElement.scrollLeft || $window.pageXOffset,
-            container = $scope.container[0];
+      // Make sure an element has id.
+      // Return true if id was generated.
+      function ensure_element_id(element) {
+        if (!element.id || element.id === '') {
+          element.id = config.generate_random_id('ac_element');
+          return true;
+        }
+        return false;
+      }
 
-        container.style.top = rect.top + rect.height + scrollTop + 'px';
-        container.style.left = rect.left + scrollLeft + 'px';
-        container.style.width = rect.width + 'px';
+      function _position_autocomplete() {
+        config.position_autocomplete($scope.container, current_element);
       }
       var position_autocomplete = debounce(_position_autocomplete, user_options.debounce_position);
 
@@ -156,6 +179,8 @@ angular.module('MassAutoComplete', [])
         current_model = ngmodel;
         current_options = options;
         previous_value = ngmodel.$viewValue;
+        current_element_random_id_set = ensure_element_id(target_element);
+        $scope.container[0].setAttribute('aria-labelledby', current_element.id);
 
         $scope.results = [];
         $scope.selected_index = -1;
@@ -194,26 +219,37 @@ angular.module('MassAutoComplete', [])
                 return;
 
               if (suggestions && suggestions.length > 0) {
-              // Add the original term as the first value to enable the user
-              // to return to his original expression after suggestions were made.
-                $scope.results = [{ value: term, label: ''}].concat(suggestions);
-                $scope.show_autocomplete = true;
-                if (current_options.auto_select_first)
-                    set_selection(1);
+                // Set unique id to each suggestion so we can
+                // reference them (aria)
+                suggestions.forEach(function(s) {
+                  if (!s.id) {
+                    s.id = config.generate_random_id('ac_item');
+                  }
+                });
+                // Add the original term as the first value to enable the user
+                // to return to his original expression after suggestions were made.
+                $scope.results = [{ value: term, label: '', id: ''}].concat(suggestions);
+                show_autocomplete();
+                if (current_options.auto_select_first) {
+                  set_selection(1);
+                }
               } else {
                 $scope.results = [];
+                hide_autocomplete();
               }
             },
             function suggest_failed(error) {
-              $scope.show_autocomplete = false;
-              current_options.on_error && current_options.on_error(error);
+              hide_autocomplete();
+              if (current_options.on_error) {
+                current_options.on_error(error);
+              }
             }
           ).finally(function suggest_finally() {
             $scope.waiting_for_suggestion = false;
           });
         } else {
           $scope.waiting_for_suggestion = false;
-          $scope.show_autocomplete = false;
+          hide_autocomplete();
           $scope.$apply();
         }
       }
@@ -225,15 +261,22 @@ angular.module('MassAutoComplete', [])
         if (current_element) {
           var value = current_element.val();
           update_model_value(value);
-          current_options.on_detach && current_options.on_detach(value);
-          current_element.unbind(EVENTS.KEYDOWN, bound_events[EVENTS.KEYDOWN]);
-          current_element.unbind(EVENTS.BLUR, bound_events[EVENTS.BLUR]);
+          if (current_options.on_detach) {
+            current_options.on_detach(value);
+          }
+          current_element.unbind(config.EVENTS.KEYDOWN, bound_events[config.EVENTS.KEYDOWN]);
+          current_element.unbind(config.EVENTS.BLUR, bound_events[config.EVENTS.BLUR]);
+          if (current_element_random_id_set) {
+            current_element[0].removeAttribute('id');
+          }
         }
-
-        // Clear references and events.
-        $scope.show_autocomplete = false;
-        angular.element($window).unbind(EVENTS.RESIZE, bound_events[EVENTS.RESIZE]);
-        value_watch && value_watch();
+        hide_autocomplete();
+        $scope.container[0].removeAttribute('aria-labelledby');
+        // Clear references and config.events.
+        angular.element($window).unbind(config.EVENTS.RESIZE, bound_events[config.EVENTS.RESIZE]);
+        if (value_watch) {
+          value_watch();
+        }
         $scope.selected_index = $scope.results = undefined;
         current_model = current_element = previous_value = undefined;
       };
@@ -249,6 +292,11 @@ angular.module('MassAutoComplete', [])
         }
       }
 
+      function clear_selection() {
+        $scope.selected_index = -1;
+        $scope.container[0].removeAttribute('aria-activedescendant');
+      }
+
       // Set the current selection while navigating through the menu.
       function set_selection(i) {
         // We use value instead of setting the model's view value
@@ -257,6 +305,7 @@ angular.module('MassAutoComplete', [])
         var selected = $scope.results[i];
         current_element.val(selected.value);
         $scope.selected_index = i;
+        $scope.container[0].setAttribute('aria-activedescendant', selected.id);
         return selected;
       }
 
@@ -271,7 +320,7 @@ angular.module('MassAutoComplete', [])
         var selected = set_selection(i);
         last_selected_value = selected.value;
         update_model_value(selected.value);
-        $scope.show_autocomplete = false;
+        hide_autocomplete();
 
         if (current_options.on_select) {
           current_options.on_select(selected);
@@ -302,7 +351,7 @@ angular.module('MassAutoComplete', [])
             // if the menu is closed.
             case config.KEYS.ESC:
               if ($scope.show_autocomplete) {
-                $scope.show_autocomplete = false;
+                hide_autocomplete();
                 $scope.$apply();
               } else {
                 current_element.val(previous_value);
