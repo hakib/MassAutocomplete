@@ -130,12 +130,16 @@ angular.module('MassAutoComplete', [])
               var context = this, args = arguments;
               var later = function() {
                   timeout = null;
-                  if (!immediate) func.apply(context, args);
+                  if (!immediate) {
+                    func.apply(context, args);
+                  }
               };
               var callNow = immediate && !timeout;
               clearTimeout(timeout);
               timeout = setTimeout(later, wait);
-              if (callNow) func.apply(context, args);
+              if (callNow) {
+                func.apply(context, args);
+              }
           };
       }
 
@@ -164,8 +168,9 @@ angular.module('MassAutoComplete', [])
               // Make sure the suggestion we are processing is of the current element.
               // When using remote sources for example, a suggestion cycle might be
               // triggered at a later time (When a different field is in focus).
-              if (!current_element || current_element !== target_element)
+              if (!current_element || current_element !== target_element) {
                 return;
+              }
 
               if (suggestions && suggestions.length > 0) {
                 // Set unique id to each suggestion so we can
@@ -245,8 +250,9 @@ angular.module('MassAutoComplete', [])
             // When selecting from the menu the ng-model is updated and this watch
             // is triggered. This causes another suggestion cycle that will provide as
             // suggestion the value that is currently selected - this is unnecessary.
-            if (nv === last_selected_value)
+            if (nv === last_selected_value) {
               return;
+            }
 
             _position_autocomplete();
             suggest(nv, current_element);
@@ -314,8 +320,9 @@ angular.module('MassAutoComplete', [])
       // selection is directly applied.
       $scope.apply_selection = function (i) {
         current_element[0].focus();
-        if (!$scope.show_autocomplete || i > $scope.results.length || i < 0)
+        if (!$scope.show_autocomplete || i > $scope.results.length || i < 0) {
           return;
+        }
 
         var selected = set_selection(i);
         last_selected_value = selected.value;
@@ -336,15 +343,18 @@ angular.module('MassAutoComplete', [])
           // using the mouse (or touch). In that case we don't want to detach so
           // we wait several ms for the input to regain focus.
           $timeout(function() {
-            if (!current_element || current_element[0] !== $document[0].activeElement)
+            if (!current_element || current_element[0] !== $document[0].activeElement) {
               that.detach();
+            }
           }, user_options.debounce_blur);
         };
         current_element.bind(config.EVENTS.BLUR, bound_events[config.EVENTS.BLUR]);
 
         bound_events[config.EVENTS.KEYDOWN] = function (e) {
           // Reserve key combinations with shift for different purposes.
-          if (e.shiftKey) return;
+          if (e.shiftKey) {
+            return;
+          }
 
           switch (e.keyCode) {
             // Close the menu if it's open. Or, undo changes made to the value
@@ -386,8 +396,9 @@ angular.module('MassAutoComplete', [])
             // Navigate the menu when it's open. When it's not open fall back
             // to default behavior.
             case config.KEYS.TAB:
-              if (!$scope.show_autocomplete)
+              if (!$scope.show_autocomplete) {
                 break;
+              }
 
               e.preventDefault();
 
