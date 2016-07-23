@@ -1,6 +1,6 @@
 {
   "name": "angular-mass-autocomplete",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Autocomplete for Angular.js applications with a lot to complete",
   "main": "massautocomplete.js",
   "repository": {

@@ -1,9 +1,14 @@
 MassAutocomplete
 ================
 
+### v0.3.0
+- Extracted common configuration to provider.
+- Added ability to change the default implementation of positioning the ac container relative to the target input.
+- Improved accessibility.
+
 ### v0.2.4
 - During detach unbind only handlers bound by the directive it self (Thanks @Scoup and @maninga for the pull requests).
-- Added test configuration and several scenarios to the dev branch. 
+- Added test configuration and several scenarios to the dev branch.
 
 ### v0.2.3
 - Fixed suggestion box opened when no item or other item is selected (Issue #20 - Thanks @pfiaux for opening the issue).
