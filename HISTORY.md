@@ -1,6 +1,10 @@
 MassAutocomplete
 ================
 
+### v0.4.0
+- Lint & style changes.
+- (Breaking change) Renamed MassautoCompleteConfigurrerProvider -> massAutocompleteConfig to match directive name.
+
 ### v0.3.0
 - Extracted common configuration to provider.
 - Added ability to change the default implementation of positioning the ac container relative to the target input.
