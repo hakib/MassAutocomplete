@@ -1,0 +1,37 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": ["error", 2, {"SwitchCase": 1, "outerIIFEBody": 0, "VariableDeclarator": {"var": 2}}],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "no-console": "error",
+        "consistent-return": "error",
+        "curly": "error",
+        "eqeqeq": "error",
+        "radix": "error",
+        "no-shadow": "error",
+        "no-use-before-define": ["error", {"functions": false}],
+        "comma-dangle": ["error", "never"],
+        "no-trailing-spaces": "error",
+        "space-before-function-paren": ["error", "never"],
+        "eol-last": "error",
+        "no-unused-expressions": "error",
+        "no-unused-vars": ["error", {"args": "all", "argsIgnorePattern": "^_"}],
+        "array-callback-return": "error",
+        "block-scoped-var": "error",
+        "no-extra-bind": "error",
+        "no-extra-label": "error",
+        "no-loop-func": "error",
+        "no-multi-spaces": "error",
+        "no-unmodified-loop-condition": "error",
+        "no-useless-call": "error",
+        "no-throw-literal": "error"
+    },
+    "globals": {
+        "angular": false
+    }
+}

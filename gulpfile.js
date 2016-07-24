@@ -1,13 +1,20 @@
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
+var gulp = require('gulp'),
+    uglify = require('gulp-uglify'),
+    rename = require('gulp-rename'),
+    eslint = require('gulp-eslint');
 
- // Minify JS
-gulp.task('dist', function() {
+gulp.task('lint', function() {
+  return gulp.src('massautocomplete.js')
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
+
+gulp.task('dist', ['lint'], function() {
   return gulp.src('massautocomplete.js')
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest(''));
 });
- // Default Task
+
 gulp.task('default', ['dist']);
