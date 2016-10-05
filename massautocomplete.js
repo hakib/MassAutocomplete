@@ -34,12 +34,10 @@ angular.module('MassAutoComplete', [])
 
   // Position ac container given a target element
   config.position_autocomplete = function(container, target) {
-    var rect = target[0].getBoundingClientRect(),
-        scrollTop = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset,
-        scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft || window.pageXOffset;
+    var rect = target[0].getBoundingClientRect();
 
-    container[0].style.top = rect.top + rect.height + scrollTop + 'px';
-    container[0].style.left = rect.left + scrollLeft + 'px';
+    container[0].style.left = 0;
+    container[0].style.top = rect.height + 'px';
     container[0].style.width = rect.width + 'px';
   };
 
@@ -80,7 +78,7 @@ angular.module('MassAutoComplete', [])
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
     },
 
-    controller: ['$scope', function($scope) {
+    controller: ['$scope', '$element', function($scope, $element) {
       var that = this;
 
       var bound_events = {};
@@ -427,6 +425,12 @@ angular.module('MassAutoComplete', [])
         that.detach();
         $scope.container.remove();
       });
+
+      // Make element positionned if not already
+      if (['fixed', 'absolute', 'sticky', 'relative'].indexOf($element.css('position')) === -1) {
+        $element.css('position', 'relative');
+      }
+
     }]
   };
 }])
