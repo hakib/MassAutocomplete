@@ -1,7 +1,10 @@
 MassAutocomplete
 ================
 
-### v0.4.0
+## v0.5.0
+- Fix debounce function to use $timeout instead of setTimeout (PR #61, Thanks @OoDeLally!)
+
+## v0.4.0
 - Lint & style changes.
 - (Breaking change) Renamed MassautoCompleteConfigurrerProvider -> massAutocompleteConfig to match directive name.
 
