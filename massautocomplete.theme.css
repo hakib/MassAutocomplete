@@ -1,3 +1,6 @@
+[mass-autocomplete] {
+  position: relative;
+}
 .ac-container {
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
