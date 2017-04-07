@@ -61,8 +61,7 @@ angular.module('MassAutoComplete', [])
       '<div class="ac-container" ' +
            'aria-autocomplete="list" ' +
            'role="listbox" ' +
-           'ng-show="show_autocomplete" ' +
-           'style="position:absolute;">' +
+           'ng-show="show_autocomplete">' +
 
         '<ul class="ac-menu"> ' +
           '<li ng-repeat="result in results" ng-if="$index > 0" ' +
@@ -78,6 +77,7 @@ angular.module('MassAutoComplete', [])
 
     link: function(scope, element) {
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
+      scope.container[0].style.position = "absolute";
     },
 
     controller: ['$scope', function($scope) {
