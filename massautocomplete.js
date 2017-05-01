@@ -77,7 +77,7 @@ angular.module('MassAutoComplete', [])
 
     link: function(scope, element) {
       scope.container = angular.element(element[0].getElementsByClassName('ac-container')[0]);
-      scope.container[0].style.position = "absolute";
+      scope.container[0].style.position = 'absolute';
     },
 
     controller: ['$scope', function($scope) {

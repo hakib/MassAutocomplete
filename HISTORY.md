@@ -1,6 +1,9 @@
 MassAutocomplete
 ================
 
+## v0.6.0
+- Set `position:absolute` in directive, so it won't trigger a CSP error (PR #67, Thanks @thany!)
+
 ## v0.5.0
 - Fix debounce function to use $timeout instead of setTimeout (PR #61, Thanks @OoDeLally!)
 
