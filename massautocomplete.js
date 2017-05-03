@@ -321,6 +321,10 @@ angular.module('MassAutoComplete', [])
         update_model_value(selected.value);
         hide_autocomplete();
 
+        if(current_options.blur_on_select){
+          current_element[0].blur();
+        }
+
         if (current_options.on_select) {
           current_options.on_select(selected);
         }
