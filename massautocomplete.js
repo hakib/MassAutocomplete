@@ -154,7 +154,7 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
-        if (typeof(term) === 'string' && term.length > 0) {
+        if (typeof(term) === 'string' && (term.length > 0 || current_options.suggest_when_empty)) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
               // Make sure the suggestion we are processing is of the current element.
