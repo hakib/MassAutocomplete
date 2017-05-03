@@ -101,7 +101,7 @@ angular.module('MassAutoComplete', [])
           current_options,
           previous_value,
           value_watch,
-          last_selected_value,
+          last_selected_value = null,
           current_element_random_id_set;
 
       $scope.show_autocomplete = false;
@@ -154,7 +154,8 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
-        if (typeof(term) === 'string' && (term.length > 0 || current_options.suggest_when_empty)) {
+        if ((typeof(term) === 'string' || (term === undefined && current_options.suggest_when_empty)) &&
+            (current_options.suggest_when_empty || term.length > 0)) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
               // Make sure the suggestion we are processing is of the current element.
