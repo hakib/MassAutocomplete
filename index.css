@@ -1,0 +1,118 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
+
+body {
+  font-family: Ubuntu, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #e8e8e8;
+  background: radial-gradient(circle, #f4f4f4, #e4e4e4);
+  background-attachment: fixed;
+  font-size: 15px;
+}
+
+.main {
+  background-color: white;
+  padding-bottom: 30px;
+}
+.slim {
+  max-width: 900px;
+}
+
+@media screen and (min-width: 830px) {
+  .main {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+code {
+  min-width: 800px;
+}
+.col-sm-8 > pre > code {
+  min-width: 530px;
+}
+
+@media screen and (max-width: 830px) {
+  .form-control {
+    margin-bottom: 10px;
+  }
+
+  table.table-bordered>tbody>tr>th,
+  table.table-bordered>thead>tr>th,
+  table.table-bordered>tbody>tr>td {
+    display: block;
+    width: 100%;
+    border: 0;
+  }
+  table th[colspan="2"] {
+    background-color: #e8e8e8;
+  }
+}
+
+.container .jumbotron {
+  background-color: orangered;
+  background: linear-gradient(orangered, rgb(233, 0, 56));
+  color: white;
+  border-radius: 0;
+  margin-bottom: 0;
+  text-shadow: 1px 1px 1px #333;
+}
+
+nav.navbar {
+  border-radius: 0;
+}
+
+h3 {
+  color: orangered;
+}
+
+h4 {
+  margin-top: 25px;
+}
+
+.form-control {
+  background-color: lightyellow;
+  border-radius: 0!important;
+}
+
+.highlight {
+  background-color: lightyellow;
+  font-weight: bold;
+}
+
+pre {
+  padding: 0;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+.benchmarks iframe {
+  border: 1px solid #333;
+  padding: 0;
+  min-height: 800px!important;
+}
+
+@media screen and (max-width: 992px) {
+  .benchmarks iframe {
+    min-height: 300px!important;
+  }
+}
+
+.twitter-share-button {
+  margin-top: 18px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+mark {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+mark .hljs-attribute {
+  color: black;
+}
+
+mark .hljs-string, mark .hljs-value {
+  color: orangered;
+}
