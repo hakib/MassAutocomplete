@@ -115,18 +115,18 @@ angular.module('MassAutoComplete', [])
 
       // Debounce - taken from underscore.
       function debounce(func, wait, immediate) {
-        var timeout;
+        var timeoutPromise;
         return function() {
           var context = this, args = arguments;
           var later = function() {
-            timeout = null;
+            timeoutPromise = null;
             if (!immediate) {
               func.apply(context, args);
             }
           };
-          var callNow = immediate && !timeout;
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
+          var callNow = immediate && !timeoutPromise;
+          $timeout.cancel(timeoutPromise);
+          timeoutPromise = $timeout(later, wait);
           if (callNow) {
             func.apply(context, args);
           }
