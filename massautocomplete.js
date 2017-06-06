@@ -40,6 +40,13 @@ angular.module('MassAutoComplete', [])
     container[0].style.width = rect.width + 'px';
   };
 
+  config.CLASSES = {
+    container: 'ac-container',
+    menu: 'ac-menu',
+    menu_item: 'ac-menu-item',
+    menu_item_focus: 'ac-state-focus'
+  };
+
   this.$get = function() {
     return config;
   };
@@ -55,17 +62,17 @@ angular.module('MassAutoComplete', [])
     template:
       '<span ng-transclude></span>' +
 
-      '<div class="ac-container" ' +
+      '<div class="' + config.CLASSES.container + '" ' +
            'aria-autocomplete="list" ' +
            'role="listbox" ' +
            'ng-show="show_autocomplete">' +
 
-        '<ul class="ac-menu"> ' +
+        '<ul class="' + config.CLASSES.menu+ '"> ' +
           '<li ng-repeat="result in results" ng-if="$index > 0" ' +
-            'class="ac-menu-item" ' +
+            'class="' + config.CLASSES.menu_item + '" ' +
             'role="option" ' +
             'id="{{result.id}}" ' +
-            'ng-class="$index == selected_index ? \'ac-state-focus\': \'\'">' +
+            'ng-class="$index == selected_index ? \'' + config.CLASSES.menu_item_focus + '\': \'\'">' +
             '<a href ng-click="apply_selection($index)" ng-bind-html="result.label"></a>' +
           '</li>' +
         '</ul>' +
