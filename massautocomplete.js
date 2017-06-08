@@ -300,11 +300,25 @@ angular.module('MassAutoComplete', [])
         $scope.container[0].removeAttribute('aria-activedescendant');
       }
 
+      // Set the scroll on selected position when keypress
+      function set_scroll(i) {
+        // only if container has scroll
+        if(angular.element($scope.container).get(0).scrollHeight > angular.element($scope.container).height()) {
+          var selected = $scope.results[i];
+
+          if(selected.id !== '') {
+            var current_id_el = angular.element('#' + selected.id)[0];
+            angular.element($scope.container).scrollTop(current_id_el.offsetTop);
+          }
+        }
+      }
+
       // Set the current selection while navigating through the menu.
       function set_selection(i) {
         // We use value instead of setting the model's view value
         // because we watch the model value and setting it will trigger
         // a new suggestion cycle.
+
         var selected = $scope.results[i];
         current_element.val(selected.value);
         $scope.selected_index = i;
@@ -352,6 +366,8 @@ angular.module('MassAutoComplete', [])
           if (e.shiftKey) {
             return;
           }
+
+          var position;
 
           switch (e.keyCode) {
             // Close the menu if it's open. Or, undo changes made to the value
@@ -406,7 +422,9 @@ angular.module('MassAutoComplete', [])
             case config.KEYS.DOWN:
               if ($scope.results.length > 0) {
                 if ($scope.show_autocomplete) {
-                  set_selection($scope.selected_index + 1 > $scope.results.length - 1 ? 0 : $scope.selected_index + 1);
+                  position = $scope.selected_index + 1 > $scope.results.length - 1 ? 0 : $scope.selected_index + 1;
+                  set_selection(position);
+                  set_scroll(position);
                 } else {
                   show_autocomplete();
                   set_selection(0);
@@ -419,7 +437,9 @@ angular.module('MassAutoComplete', [])
             case config.KEYS.UP:
               if ($scope.show_autocomplete) {
                 e.preventDefault();
-                set_selection($scope.selected_index - 1 >= 0 ? $scope.selected_index - 1 : $scope.results.length - 1);
+                position = $scope.selected_index - 1 >= 0 ? $scope.selected_index - 1 : $scope.results.length - 1;
+                set_selection(position);
+                set_scroll(position);
                 $scope.$apply();
               }
               break;
