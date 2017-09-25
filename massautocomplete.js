@@ -106,8 +106,12 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = -1;
         bind_element();
 
+        //Added to ensure on attach if value there it doesnt try reset to all - DAVID 08/06/2017
+        if (current_element[0].value.length == 0) suggest("", current_element);;
+
         value_watch = $scope.$watch(
           function () {
+            if (current_options.display_on_attach && ngmodel.$modelValue == null) ngmodel.$modelValue = "";
             return ngmodel.$modelValue;
           },
           function (nv, ov) {
@@ -129,7 +133,7 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
-        if (typeof(term) === 'string' && term.length > 0) {
+        if (typeof(term) === 'string' && term.length > 0 || current_options.display_on_attach) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
               // Make sure the suggestion we are processing is of the current element.
