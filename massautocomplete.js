@@ -89,7 +89,7 @@ angular.module('MassAutoComplete', [])
       // Attach autocomplete behaviour to an input element.
       function _attach(ngmodel, target_element, options) {
         // Element is already attached.
-          if (current_element === target_element) return;
+        if (current_element === target_element) return;
         // Safe: clear previously attached elements.
         if (current_element) that.detach();
         // The element is still the active element.
@@ -106,12 +106,12 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = -1;
         bind_element();
 
-       //Added to ensure on attach if value there it doesnt try reset to all - DAVID 08/06/2017
+        //Added to ensure on attach if value there it doesnt try reset to all - DAVID 08/06/2017
         if (current_element[0].value.length == 0) suggest("", current_element);;
 
         value_watch = $scope.$watch(
-            function () {
-                if (current_options.display_on_attach && ngmodel.$modelValue == null) ngmodel.$modelValue = "";
+          function () {
+            if (current_options.display_on_attach && ngmodel.$modelValue == null) ngmodel.$modelValue = "";
             return ngmodel.$modelValue;
           },
           function (nv, ov) {
@@ -133,38 +133,38 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
-        if (typeof (term) === 'string' && term.length > 0 || current_options.display_on_attach) {
-              $q.when(current_options.suggest(term),
-                  function suggest_succeeded(suggestions) {
-                      // Make sure the suggestion we are processing is of the current element.
-                      // When using remote sources for example, a suggestion cycnle might be
-                      // triggered at a later time (When a different field is in focus).
-                      if (!current_element || current_element !== target_element)
-                          return;
+        if (typeof(term) === 'string' && term.length > 0 || current_options.display_on_attach) {
+          $q.when(current_options.suggest(term),
+            function suggest_succeeded(suggestions) {
+              // Make sure the suggestion we are processing is of the current element.
+              // When using remote sources for example, a suggestion cycnle might be
+              // triggered at a later time (When a different field is in focus).
+              if (!current_element || current_element !== target_element)
+                return;
 
-                      if (suggestions && suggestions.length > 0) {
-                          // Add the original term as the first value to enable the user
-                          // to return to his original expression after suggestions were made.
-                          $scope.results = [{ value: term, label: '' }].concat(suggestions);
-                          $scope.show_autocomplete = true;
-                          if (current_options.auto_select_first)
-                              set_selection(1);
-                      } else {
-                          $scope.results = [];
-                      }
-                  },
-                  function suggest_failed(error) {
-                      $scope.show_autocomplete = false;
-                      current_options.on_error && current_options.on_error(error);
-                  }
-              ).finally(function suggest_finally() {
-                  $scope.waiting_for_suggestion = false;
-              });
-          } else {
-              $scope.waiting_for_suggestion = false;
+              if (suggestions && suggestions.length > 0) {
+              // Add the original term as the first value to enable the user
+              // to return to his original expression after suggestions were made.
+                $scope.results = [{ value: term, label: ''}].concat(suggestions);
+                $scope.show_autocomplete = true;
+                if (current_options.auto_select_first)
+                    set_selection(1);
+              } else {
+                $scope.results = [];
+              }
+            },
+            function suggest_failed(error) {
               $scope.show_autocomplete = false;
-              $scope.$apply();
-          }
+              current_options.on_error && current_options.on_error(error);
+            }
+          ).finally(function suggest_finally() {
+            $scope.waiting_for_suggestion = false;
+          });
+        } else {
+          $scope.waiting_for_suggestion = false;
+          $scope.show_autocomplete = false;
+          $scope.$apply();
+        }
       }
       var suggest = debounce(_suggest, user_options.debounce_suggest);
 
