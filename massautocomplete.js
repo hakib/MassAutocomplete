@@ -146,8 +146,8 @@ angular.module('MassAutoComplete', [])
       // Make sure an element has id.
       // Return true if id was generated.
       function ensure_element_id(element) {
-        if (!element.id || element.id === '') {
-          element.id = config.generate_random_id('ac_element');
+        if (!element[0].id || element[0].id === '') {
+          element[0].id = config.generate_random_id('ac_element');
           return true;
         }
         return false;
