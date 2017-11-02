@@ -235,7 +235,7 @@ angular.module('MassAutoComplete', [])
         current_options = options;
         previous_value = ngmodel.$viewValue;
         current_element_random_id_set = ensure_element_id(target_element);
-        $scope.container[0].setAttribute('aria-labelledby', current_element.id);
+        $scope.container[0].setAttribute('aria-labelledby', current_element[0].id);
 
         $scope.results = [];
         $scope.selected_index = -1;
