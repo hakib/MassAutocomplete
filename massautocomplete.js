@@ -146,8 +146,8 @@ angular.module('MassAutoComplete', [])
       // Make sure an element has id.
       // Return true if id was generated.
       function ensure_element_id(element) {
-        if (!element.id || element.id === '') {
-          element.id = config.generate_random_id('ac_element');
+        if (!element[0].id || element[0].id === '') {
+          element[0].id = config.generate_random_id('ac_element');
           return true;
         }
         return false;
@@ -235,7 +235,7 @@ angular.module('MassAutoComplete', [])
         current_options = options;
         previous_value = ngmodel.$viewValue;
         current_element_random_id_set = ensure_element_id(target_element);
-        $scope.container[0].setAttribute('aria-labelledby', current_element.id);
+        $scope.container[0].setAttribute('aria-labelledby', current_element[0].id);
 
         $scope.results = [];
         $scope.selected_index = -1;
