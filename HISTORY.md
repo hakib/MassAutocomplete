@@ -1,6 +1,10 @@
 MassAutocomplete
 ================
 
+## v0.7.0
+- Handle undefined target when positioning auto complete container (PR #77, Thanks @harrisong!)
+- Make classes configurable. See PR #62 for more information.
+
 ## v0.6.0
 - Set `position:absolute` in directive, so it won't trigger a CSP error (PR #67, Thanks @thany!)
 
