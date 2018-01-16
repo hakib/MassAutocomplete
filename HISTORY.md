@@ -1,6 +1,9 @@
 MassAutocomplete
 ================
 
+## v0.8.0
+- Fix suggestion box is not opening when value of last selected value is entered (PR #79, Thanks @ncomont!)
+
 ## v0.7.0
 - Handle undefined target when positioning auto complete container (PR #77, Thanks @harrisong!)
 - Make classes configurable. See PR #62 for more information.
