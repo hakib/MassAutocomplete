@@ -303,6 +303,7 @@ angular.module('MassAutoComplete', [])
       function clear_selection() {
         $scope.selected_index = -1;
         $scope.container[0].removeAttribute('aria-activedescendant');
+        last_selected_value = undefined;
       }
 
       // Set the current selection while navigating through the menu.
