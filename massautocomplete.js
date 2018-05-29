@@ -7,6 +7,8 @@ angular.module('MassAutoComplete', [])
 .provider('massAutocompleteConfig', function() {
   var config = this;
 
+  config.min_length = 1;
+
   config.KEYS = {
     TAB: 9,
     ESC: 27,
@@ -103,7 +105,8 @@ angular.module('MassAutoComplete', [])
         debounce_position: _user_options.debounce_position || config.DEBOUNCE.position,
         debounce_attach: _user_options.debounce_attach || config.DEBOUNCE.attach,
         debounce_suggest: _user_options.debounce_suggest || config.DEBOUNCE.suggest,
-        debounce_blur: _user_options.debounce_blur || config.DEBOUNCE.blur
+        debounce_blur: _user_options.debounce_blur || config.DEBOUNCE.blur,
+        min_length: _user_options.min_length || config.min_length
       };
 
       var current_element,
@@ -164,7 +167,7 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
-        if (typeof(term) === 'string' && term.length > 0) {
+        if (typeof(term) === 'string' && term.length >= _user_options.min_length) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
               // Make sure the suggestion we are processing is of the current element.
