@@ -7,7 +7,7 @@ angular.module('MassAutoComplete', [])
 .provider('massAutocompleteConfig', function() {
   var config = this;
 
-  config.min_length = 0;
+  config.min_length = 1;
 
   config.KEYS = {
     TAB: 9,
@@ -167,7 +167,7 @@ angular.module('MassAutoComplete', [])
         $scope.selected_index = 0;
         $scope.waiting_for_suggestion = true;
 
-        if (typeof(term) === 'string' && term.length > _user_options.min_length) {
+        if (typeof(term) === 'string' && term.length >= _user_options.min_length) {
           $q.when(current_options.suggest(term),
             function suggest_succeeded(suggestions) {
               // Make sure the suggestion we are processing is of the current element.
