@@ -1,5 +1,5 @@
 /* global angular */
-(function() {
+(function(angular) {
 'use strict';
 
 angular.module('MassAutoComplete', [])
@@ -456,4 +456,4 @@ angular.module('MassAutoComplete', [])
     }
   };
 });
-})();
+})(angular);
