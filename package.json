@@ -1,8 +1,8 @@
 {
   "name": "angular-mass-autocomplete",
-  "version": "0.5.0",
+  "version": "0.5.4",
   "description": "Autocomplete for Angular.js applications with a lot to complete",
-  "main": "massautocomplete.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/hakib/MassAutocomplete"
@@ -18,8 +18,8 @@
   "bugs": {
     "url": "https://github.com/hakib/MassAutocomplete/issues"
   },
-  "peerDependencies": {
-    "angular": "1"
+  "dependencies": {
+    "angular": "*"
   },
   "devDependencies": {
     "eslint": "^3.1.1",
