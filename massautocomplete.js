@@ -59,7 +59,7 @@
           options: '&massAutocomplete'
         },
         transclude: true,
-        template: '<span ng-transclude></span>' +
+        template: '<span ng-keypress="apply_keyboard_selection($event.keyCode)" ng-transclude></span>' +
 
           '<div class="' + config.CLASSES.container + '" ' +
           'aria-autocomplete="list" ' +
@@ -328,6 +328,19 @@
             $scope.selected_index = i;
             $scope.container[0].setAttribute('aria-activedescendant', selected.id);
             return selected;
+          }
+
+          $scope.apply_keyboard_selection = function (keyCode) {
+            if (keyCode == 13) { // press enter
+              var selected = set_selection(1);
+              last_selected_value = selected.value;
+              update_model_value(selected.value);
+              hide_autocomplete();
+
+              if (current_options.on_select) {
+                current_options.on_select(selected);
+              }
+            }
           }
 
           // Apply and accept the current selection made from the menu.
